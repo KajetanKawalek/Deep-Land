@@ -36,7 +36,7 @@ namespace Deep_Land
         {
             Console.CursorVisible = false;
             Console.SetCursorPosition(0, 0);
-            FastConsole.Init(50, 50);
+            FastConsole.Init(45, 45); // One chunk = 15x15;
         }
 
         static void Input()
