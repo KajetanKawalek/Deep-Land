@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Deep_Land
 {
-    class MainLoop
+    public static class MainLoop
     {
         static int x = 2;
         static int y = 2;
@@ -22,6 +22,8 @@ namespace Deep_Land
                 stopwatch.Reset();
                 stopwatch.Start();
 
+                //Cell cell = new Cell();
+                //cell.Update();
                 Input();
                 Update();
                 Render();

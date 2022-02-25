@@ -180,7 +180,6 @@ namespace Deep_Land
         {
             CONSOLE_FONT_INFO_EX ConsoleFontInfo = new CONSOLE_FONT_INFO_EX()
             {
-                FontFamily = 2,
                 FaceName = fontName,
                 dwFontSize = new Coord(w, h)
             };
