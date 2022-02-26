@@ -22,10 +22,5 @@ namespace Deep_Land
         {
 
         }
-
-        public virtual void Render()
-        {
-
-        }
     }
 }

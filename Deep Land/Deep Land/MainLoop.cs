@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace Deep_Land
 {
@@ -37,6 +38,9 @@ namespace Deep_Land
             Console.CursorVisible = false;
             Console.SetCursorPosition(0, 0);
             FastConsole.Init(45, 45); // One chunk = 15x15;
+
+            World.Init(new Vector2(45, 45));
+            World.LoadCells(new Vector2(16, 16));
         }
 
         static void Input()
@@ -67,28 +71,30 @@ namespace Deep_Land
             }
         }
 
-        static int count;
-
         static void Update()
         {
-            
-            count++;
-            if(count < 50)
+            foreach(Cell cell in World.loadedCellsArray)
             {
-                FastConsole.WriteToBuffer(x, y, '@', ConsoleColor.Red);
-            }
-            else if(count < 100)
-            {
-                FastConsole.WriteToBuffer(x, y, '#', ConsoleColor.Green);
-            }
-            else
-            {
-                count = 0;
+                if(cell != null)
+                {
+                    cell.Update();
+                }
             }
         }
 
         static void Render()
         {
+            for(int i = 0; i < 45; i++)
+            {
+                for (int i2 = 0; i2 < 45; i2++)
+                {
+                    if(World.loadedCellsArray[i, i2] != null)
+                        FastConsole.WriteToBuffer(i, i2, World.loadedCellsArray[i,i2].display, World.loadedCellsArray[i, i2].color);
+                    else
+                        FastConsole.WriteToBuffer(i, i2, ' ', ConsoleColor.Black);
+                }
+            }
+
             FastConsole.Draw();
         }
     }

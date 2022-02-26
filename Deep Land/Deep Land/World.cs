@@ -1,25 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Numerics;
 using System.IO;
+using System.Diagnostics;
 
 namespace Deep_Land
 {
     static class World
     {
-        public static Vector2 worldSize;
+        static Vector2 worldSize;
+        static Dictionary<int, Cell> allCells = new Dictionary<int, Cell>();
+        public static Cell[,] loadedCellsArray = new Cell[45, 45];
 
-        public static void LoadCells(Vector2 cameraPosition)
+        public static void Init(Vector2 size)
         {
-            Chunk[,] chunks = PickChunks(new Vector2(16,16));
+            worldSize = size;
+
+            allCells.Add(1, new Block('#', ConsoleColor.White, Vector2.Zero, false));//Stone
+            allCells.Add(2, new Block('&', ConsoleColor.Gray, Vector2.Zero, true));//Gravel
         }
 
-        static Chunk[,] PickChunks(Vector2 pointOfIntrestPosition)
+        public static void LoadCells(Vector2 pointOfInterestPosition)
         {
-            Vector2 middleChunk = new Vector2((float)Math.Ceiling(pointOfIntrestPosition.X / 15), (float)Math.Ceiling(pointOfIntrestPosition.Y / 15));
+            Chunk[,] chunks = PickChunks(pointOfInterestPosition);
+
+            loadedCellsArray = chunksToCellArray(chunks);
+        }
+
+        static Chunk[,] PickChunks(Vector2 pointOfInterestPosition)
+        {
+            Vector2 middleChunk = new Vector2((float)Math.Ceiling(pointOfInterestPosition.X / 15), (float)Math.Ceiling(pointOfInterestPosition.Y / 15));
             string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
             Chunk[,] chunks = new Chunk[3, 3];
 
@@ -30,12 +40,70 @@ namespace Deep_Land
                 for (int i2 = 0; i2 < 3; i2++)
                 {
                     string FileName = string.Format("{0}worlds\\test world\\chunk" + (middleChunk.X + i - 1) + "-" + (middleChunk.Y + i2 - 1) + ".txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
-                    string[] file = System.IO.File.ReadAllLines(FileName);
-                    chunks[i, i2] = new Chunk(file, false);
+                    Debug.WriteLine(FileName);
+                    if(File.Exists(FileName))
+                    {
+                        string[] file = System.IO.File.ReadAllLines(FileName);
+                        chunks[i, i2] = new Chunk(file, false);
+                    }
+                    else
+                    {
+                        string[] empty = new string[15] {
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                            "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0",
+                        };
+                        chunks[i, i2] = new Chunk(empty, false);
+                    }
                 }
             }
 
             return chunks;
+        }
+
+        static Cell[,] chunksToCellArray(Chunk[,] chunks)
+        {
+            Cell[,] cells = new Cell[45, 45];
+
+            for(int i = 0; i < 3; i++)
+            {
+                for (int i2 = 0; i2 < 3; i2++)
+                {
+                    Chunk ch = chunks[i, i2];
+                    for (int i3 = 0; i3 < 15; i3++)
+                    {
+                        for (int i4 = 0; i4 < 15; i4++)
+                        {
+                            int key = int.Parse(ch.array[i3, i4]);
+
+                            if(key != 0)
+                            {
+                                Cell newCell = allCells[key];
+                                newCell.positionInArray = new Vector2(i3 + (15 * i), i4 + (15 * i2));
+                                cells[i3 + (15 * i), i4 + (15 * i2)] = newCell;
+
+                            }else
+                            {
+                                cells[i3 + (15 * i), i4 + (15 * i2)] = null;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return cells;
         }
 
         public static void DebugChunk()
@@ -58,7 +126,7 @@ namespace Deep_Land
 
     class Chunk
     {
-        string[,] array = new string[15, 15];
+        public string[,] array = new string[15, 15];
 
         public Chunk(string[] stringArray, bool empty)
         {
