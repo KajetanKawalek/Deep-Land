@@ -23,8 +23,6 @@ namespace Deep_Land
                 stopwatch.Reset();
                 stopwatch.Start();
 
-                //Cell cell = new Cell();
-                //cell.Update();
                 Input();
                 Update();
                 Render();

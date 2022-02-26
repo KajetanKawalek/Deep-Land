@@ -27,7 +27,7 @@ namespace Deep_Land
 
         public void MoveTo(Vector2 newPositionInArray)
         {
-            if((newPositionInArray.X <= 45 && newPositionInArray.X >= 0) && (newPositionInArray.Y <= 45 && newPositionInArray.Y >= 0))
+            if((newPositionInArray.X <= 44 && newPositionInArray.X >= 0) && (newPositionInArray.Y <= 44 && newPositionInArray.Y >= 0))
             {
                 World.loadedCellsArray[(int)positionInArray.X, (int)positionInArray.Y] = null;
                 positionInArray = newPositionInArray;
@@ -37,8 +37,9 @@ namespace Deep_Land
 
         public bool CheckForCell(Vector2 positionInArray)
         {
-            if ((positionInArray.X <= 45 && positionInArray.X >= 0) && (positionInArray.Y <= 45 && positionInArray.Y >= 0))
+            if ((positionInArray.X <= 44 && positionInArray.X >= 0) && (positionInArray.Y <= 44 && positionInArray.Y >= 0))
             {
+                Debug.WriteLine(positionInArray);
                 return World.loadedCellsArray[(int)positionInArray.X, (int)positionInArray.Y] != null;
             }else
             {

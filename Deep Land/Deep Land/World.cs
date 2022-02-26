@@ -17,7 +17,7 @@ namespace Deep_Land
             worldSize = size;
 
             allCells.Add(1, new Block('#', ConsoleColor.White, Vector2.Zero, false));//Stone
-            allCells.Add(2, new Block('&', ConsoleColor.Gray, Vector2.Zero, false));//Gravel
+            allCells.Add(2, new Block('&', ConsoleColor.Gray, Vector2.Zero, true));//Gravel
         }
 
         public static void LoadCells(Vector2 pointOfInterestPosition)
