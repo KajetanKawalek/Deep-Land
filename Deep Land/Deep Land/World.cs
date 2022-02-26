@@ -9,15 +9,11 @@ namespace Deep_Land
     static class World
     {
         static Vector2 worldSize;
-        static Dictionary<int, Cell> allCells = new Dictionary<int, Cell>();
         public static Cell[,] loadedCellsArray = new Cell[45, 45];
 
         public static void Init(Vector2 size)
         {
             worldSize = size;
-
-            allCells.Add(1, new Block('#', ConsoleColor.White, Vector2.Zero, false));//Stone
-            allCells.Add(2, new Block('&', ConsoleColor.Gray, Vector2.Zero, true));//Gravel
         }
 
         public static void LoadCells(Vector2 pointOfInterestPosition)
@@ -85,18 +81,22 @@ namespace Deep_Land
                     {
                         for (int i4 = 0; i4 < 15; i4++)
                         {
-                            int key = int.Parse(ch.array[i3, i4]);
+                            int id = int.Parse(ch.array[i3, i4]);
 
-                            if(key != 0)
+                            CreateNewCell(id, new Vector2(i3 + (15 * i), i4 + (15 * i2)), cells);
+
+                            /*if(key != 0)
                             {
                                 Cell newCell = allCells[key];
                                 newCell.positionInArray = new Vector2(i3 + (15 * i), i4 + (15 * i2));
+                                Debug.WriteLine(new Vector2(i3 + (15 * i), i4 + (15 * i2)));
+
                                 cells[i3 + (15 * i), i4 + (15 * i2)] = newCell;
 
                             }else
                             {
                                 cells[i3 + (15 * i), i4 + (15 * i2)] = null;
-                            }
+                            }*/
                         }
                     }
                 }
@@ -120,6 +120,25 @@ namespace Deep_Land
 
             chunk.DebugWriteChunk();
             Console.ReadLine();
+        }
+
+        static void CreateNewCell(int id, Vector2 position, Cell[,] array)
+        {
+            switch (id)
+            {
+                case 0:
+                    array[(int)position.X, (int)position.Y] = null;
+                    break;
+                case 1:
+                    array[(int)position.X, (int)position.Y] = new Block("stone", '█', ConsoleColor.White, position);
+                    break;
+                case 2:
+                    array[(int)position.X, (int)position.Y] = new Powder("gravel", '▒', ConsoleColor.Gray, position, 10);
+                    break;
+                case 3:
+                    array[(int)position.X, (int)position.Y] = new Fluid("water", '≈', ConsoleColor.Cyan, position, 5);
+                    break;
+            }
         }
     }
 

@@ -47,6 +47,8 @@
   <ItemGroup>
     <Compile Include="Base.cs" />
     <Compile Include="Cells\Blocks\Block.cs" />
+    <Compile Include="Cells\Blocks\Fluid.cs" />
+    <Compile Include="Cells\Blocks\Powder.cs" />
     <Compile Include="Cells\Cell.cs" />
     <Compile Include="FastConsole.cs" />
     <Compile Include="MainLoop.cs" />

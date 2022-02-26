@@ -24,7 +24,9 @@ namespace Deep_Land
                 stopwatch.Start();
 
                 Input();
+                PreUpdate();
                 Update();
+                PostUpdate();
                 Render();
 
                 while (stopwatch.ElapsedMilliseconds < timeStep) ;
@@ -69,13 +71,35 @@ namespace Deep_Land
             }
         }
 
+        static void PreUpdate()
+        {
+            foreach (Base cell in World.loadedCellsArray)
+            {
+                if (cell != null)
+                {
+                    cell.PreUpdate();
+                }
+            }
+        }
+
         static void Update()
         {
-            foreach(Cell cell in World.loadedCellsArray)
+            foreach(Base cell in World.loadedCellsArray)
             {
                 if(cell != null)
                 {
                     cell.Update();
+                }
+            }
+        }
+
+        static void PostUpdate()
+        {
+            foreach (Base cell in World.loadedCellsArray)
+            {
+                if (cell != null)
+                {
+                    cell.PostUpdate();
                 }
             }
         }
