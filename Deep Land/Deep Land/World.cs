@@ -17,7 +17,7 @@ namespace Deep_Land
             worldSize = size;
 
             allCells.Add(1, new Block('#', ConsoleColor.White, Vector2.Zero, false));//Stone
-            allCells.Add(2, new Block('&', ConsoleColor.Gray, Vector2.Zero, true));//Gravel
+            allCells.Add(2, new Block('&', ConsoleColor.Gray, Vector2.Zero, false));//Gravel
         }
 
         public static void LoadCells(Vector2 pointOfInterestPosition)
@@ -39,8 +39,7 @@ namespace Deep_Land
             {
                 for (int i2 = 0; i2 < 3; i2++)
                 {
-                    string FileName = string.Format("{0}worlds\\test world\\chunk" + (middleChunk.X + i - 1) + "-" + (middleChunk.Y + i2 - 1) + ".txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
-                    Debug.WriteLine(FileName);
+                    string FileName = string.Format("{0}worlds\\test world\\chunk" + (middleChunk.X + i2 - 1) + "-" + (middleChunk.Y + i - 1) + ".txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
                     if(File.Exists(FileName))
                     {
                         string[] file = System.IO.File.ReadAllLines(FileName);
@@ -137,7 +136,7 @@ namespace Deep_Land
                     string[] str = stringArray[i].Split('.');
                     for (int i2 = 0; i2 < 15; i2++)
                     {
-                        array[i, i2] = str[i2];
+                        array[i2, i] = str[i2];
                     }
                 }
             }else
@@ -146,7 +145,7 @@ namespace Deep_Land
                 {
                     for (int i2 = 0; i2 < 3; i2++)
                     {
-                        array[i, i2] = "0";
+                        array[i2, i] = "0";
                     }
                 }
             }
