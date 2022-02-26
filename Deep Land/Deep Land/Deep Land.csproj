@@ -50,6 +50,7 @@
     <Compile Include="Cells\Blocks\Fluid.cs" />
     <Compile Include="Cells\Blocks\Powder.cs" />
     <Compile Include="Cells\Cell.cs" />
+    <Compile Include="Cells\Entities\Entity.cs" />
     <Compile Include="FastConsole.cs" />
     <Compile Include="MainLoop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -58,8 +59,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Cells\Entities\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

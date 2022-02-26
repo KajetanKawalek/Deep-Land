@@ -37,6 +37,12 @@ namespace Deep_Land
                 if (!CheckForCell(new Vector2(positionInArray.X, positionInArray.Y + 1)))
                 {
                     MoveTo(new Vector2(positionInArray.X, positionInArray.Y + 1));
+                }else
+                {
+                    if(CheckCell(new Vector2(positionInArray.X, positionInArray.Y + 1)) is Fluid)
+                    {
+                        SwitchPlace(new Vector2(positionInArray.X, positionInArray.Y + 1));
+                    }
                 }
 
                 count = 0;
@@ -54,6 +60,12 @@ namespace Deep_Land
                         if (!CheckForCell(new Vector2(positionInArray.X + 1, positionInArray.Y + 1)))
                         {
                             MoveTo(new Vector2(positionInArray.X + 1, positionInArray.Y + 1));
+                        }else
+                        {
+                            if (CheckCell(new Vector2(positionInArray.X + 1, positionInArray.Y + 1)) is Fluid)
+                            {
+                                SwitchPlace(new Vector2(positionInArray.X + 1, positionInArray.Y + 1));
+                            }
                         }
                     }
                     else
@@ -61,6 +73,12 @@ namespace Deep_Land
                         if (!CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y + 1)))
                         {
                             MoveTo(new Vector2(positionInArray.X - 1, positionInArray.Y + 1));
+                        }else
+                        {
+                            if (CheckCell(new Vector2(positionInArray.X - 1, positionInArray.Y + 1)) is Fluid)
+                            {
+                                SwitchPlace(new Vector2(positionInArray.X - 1, positionInArray.Y + 1));
+                            }
                         }
                     }
                 }

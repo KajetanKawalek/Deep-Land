@@ -41,7 +41,7 @@ namespace Deep_Land
 
             if (count2 > speed * 2)
             {
-                if (CheckForCell(new Vector2(positionInArray.X, positionInArray.Y + 1)))
+                if (CheckForNotEmpty(new Vector2(positionInArray.X, positionInArray.Y + 1)))
                 {
                     int rand = rng.Next(1, 3);
 
