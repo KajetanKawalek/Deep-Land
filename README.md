@@ -12,3 +12,7 @@ Features:
 - Limited Item DataBase
 - Anarchy
 - Quests (maybe)
+
+How to run: 
+This is a visual studio project and there is no build yet.
+Open this project with visual studio to run.
