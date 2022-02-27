@@ -23,7 +23,6 @@ namespace Deep_Land
                 stopwatch.Reset();
                 stopwatch.Start();
 
-                Input();
                 PreUpdate();
                 Update();
                 PostUpdate();
@@ -39,40 +38,16 @@ namespace Deep_Land
             Console.SetCursorPosition(0, 0);
             FastConsole.Init(45, 45); // One chunk = 15x15;
 
+            Input.Init();
+
             World.Init(new Vector2(45, 45));
             World.LoadCells(new Vector2(16, 16));
         }
 
-        static void Input()
-        {
-            if (Console.KeyAvailable)
-            {
-                ConsoleKeyInfo pressed = Console.ReadKey(true);
-
-                if (pressed.Key == ConsoleKey.A)
-                {
-                    x--;
-                }
-
-                if (pressed.Key == ConsoleKey.S)
-                {
-                    y++;
-                }
-
-                if (pressed.Key == ConsoleKey.D)
-                {
-                    x++;
-                }
-
-                if (pressed.Key == ConsoleKey.W)
-                {
-                    y--;
-                }
-            }
-        }
-
         static void PreUpdate()
         {
+            Input.Update();
+
             foreach (Base cell in World.loadedCellsArray)
             {
                 if (cell != null)

@@ -6,12 +6,12 @@ namespace Deep_Land
 {
     public class Block : Cell
     {
-        public Block(string blockName, char dis, ConsoleColor col, Vector2 pos)
+        public Block(string _name, char _display, ConsoleColor _color, Vector2 _positionInArray)
         {
-            name = blockName;
-            display = dis;
-            color = col;
-            positionInArray = pos;
+            name = _name;
+            display = _display;
+            color = _color;
+            positionInArray = _positionInArray;
         }
 
         public override void PreUpdate()

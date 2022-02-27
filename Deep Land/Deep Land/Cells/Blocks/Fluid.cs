@@ -8,17 +8,17 @@ namespace Deep_Land
         int count;
         int count2;
 
-        int speed;
+        int moveTime;
 
         Random rng = new Random();
 
-        public Fluid(string blockName, char dis, ConsoleColor col, Vector2 pos, int moveTime)
+        public Fluid(string _name, char _display, ConsoleColor _color, Vector2 _positionInArray, int _moveTime)
         {
-            name = blockName;
-            display = dis;
-            color = col;
-            positionInArray = pos;
-            speed = moveTime;
+            name = _name;
+            display = _display;
+            color = _color;
+            positionInArray = _positionInArray;
+            moveTime = _moveTime;
         }
 
         public override void PreUpdate()
@@ -28,7 +28,7 @@ namespace Deep_Land
 
         public override void Update()
         {
-            if (count > speed)
+            if (count > moveTime)
             {
                 if (!CheckForCell(new Vector2(positionInArray.X, positionInArray.Y + 1)))
                 {
@@ -39,7 +39,7 @@ namespace Deep_Land
             }
             count++;
 
-            if (count2 > speed * 2)
+            if (count2 > moveTime * 2)
             {
                 if (CheckForNotEmpty(new Vector2(positionInArray.X, positionInArray.Y + 1)))
                 {

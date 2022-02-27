@@ -138,6 +138,9 @@ namespace Deep_Land
                 case 3:
                     array[(int)position.X, (int)position.Y] = new Fluid("water", '≈', ConsoleColor.Cyan, position, 5);
                     break;
+                case 4:
+                    array[(int)position.X, (int)position.Y] = new Player("player", '@', ConsoleColor.Yellow, position, true, 10, 10, 1);
+                    break;
             }
         }
     }
