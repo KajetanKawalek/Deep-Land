@@ -37,7 +37,7 @@ namespace Deep_Land
         {
             if(hasGravity)
             {
-                if (count > 5)
+                if (count > 10)
                 {
                     if (!CheckForCell(new Vector2(positionInArray.X, positionInArray.Y + 1)))
                     {

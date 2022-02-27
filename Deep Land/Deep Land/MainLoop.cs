@@ -6,9 +6,6 @@ namespace Deep_Land
 {
     public static class MainLoop
     {
-        static int x = 2;
-        static int y = 2;
-
         static double timeStep = 10; // In Milliseconds
 
         static Stopwatch stopwatch = new Stopwatch();
@@ -42,6 +39,8 @@ namespace Deep_Land
 
             World.Init(new Vector2(45, 45));
             World.LoadCells(new Vector2(16, 16));
+
+            World.InstanciateAtPositionInArray(4, new Vector2(16, 16));
         }
 
         static void PreUpdate()

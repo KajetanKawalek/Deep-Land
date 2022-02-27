@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.IO;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Deep_Land
 {
     static class World
     {
+        static Vector2 edgePoint;
+        static Vector2 middlePoint;
         static Vector2 worldSize;
         public static Cell[,] loadedCellsArray = new Cell[45, 45];
 
@@ -18,14 +21,23 @@ namespace Deep_Land
 
         public static void LoadCells(Vector2 pointOfInterestPosition)
         {
+            middlePoint = pointOfInterestPosition;
+            edgePoint = new Vector2((((float)Math.Ceiling((middlePoint.X + 1) / 15) - 1) * 15) - 15, (((float)Math.Ceiling((middlePoint.Y + 1) / 15) - 1) * 15) -15);
             Chunk[,] chunks = PickChunks(pointOfInterestPosition);
 
             loadedCellsArray = chunksToCellArray(chunks);
         }
 
+        public static void SaveLoadedCells()
+        {
+            Chunk[,] chunks = CellArrayToChunks(loadedCellsArray);
+
+            WriteChunks(chunks, new Vector2((float)Math.Ceiling((middlePoint.Y + 1) / 15), (float)Math.Ceiling((middlePoint.X + 1) / 15)));
+        }
+
         static Chunk[,] PickChunks(Vector2 pointOfInterestPosition)
         {
-            Vector2 middleChunk = new Vector2((float)Math.Ceiling(pointOfInterestPosition.X / 15), (float)Math.Ceiling(pointOfInterestPosition.Y / 15));
+            Vector2 middleChunk = new Vector2((float)Math.Ceiling((pointOfInterestPosition.Y + 1) / 15), (float)Math.Ceiling((pointOfInterestPosition.X + 1) / 15));
             string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
             Chunk[,] chunks = new Chunk[3, 3];
 
@@ -38,7 +50,7 @@ namespace Deep_Land
                     string FileName = string.Format("{0}worlds\\test world\\chunk" + (middleChunk.X + i2 - 1) + "-" + (middleChunk.Y + i - 1) + ".txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
                     if(File.Exists(FileName))
                     {
-                        string[] file = System.IO.File.ReadAllLines(FileName);
+                        string[] file = File.ReadAllLines(FileName);
                         chunks[i, i2] = new Chunk(file, false);
                     }
                     else
@@ -68,6 +80,36 @@ namespace Deep_Land
             return chunks;
         }
 
+        static void WriteChunks(Chunk[,] chunks, Vector2 middleChunkPosition)
+        {
+            string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int i2 = 0; i2 < 3; i2++)
+                {
+                    string[] full = new string[15];
+                    string FileName = string.Format("{0}worlds\\test world\\chunk" + (middleChunkPosition.X + i2 - 1) + "-" + (middleChunkPosition.Y + i - 1) + ".txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
+                    Chunk ch = chunks[i, i2];
+                    if (File.Exists(FileName))
+                    {
+                        for (int i3 = 0; i3 < 15; i3++)
+                        {
+                            string line = "";
+                            for (int i4 = 0; i4 < 15; i4++)
+                            {
+                                line = line + ch.array[i3, i4] + '.';
+                            }
+                            line = line.Remove(line.Length - 1);
+                            full[i3] = line;
+                        }
+                        File.WriteAllLines(FileName, full);
+                    }
+                }
+            }
+
+        }
+
         static Cell[,] chunksToCellArray(Chunk[,] chunks)
         {
             Cell[,] cells = new Cell[45, 45];
@@ -84,25 +126,46 @@ namespace Deep_Land
                             int id = int.Parse(ch.array[i3, i4]);
 
                             CreateNewCell(id, new Vector2(i3 + (15 * i), i4 + (15 * i2)), cells);
-
-                            /*if(key != 0)
-                            {
-                                Cell newCell = allCells[key];
-                                newCell.positionInArray = new Vector2(i3 + (15 * i), i4 + (15 * i2));
-                                Debug.WriteLine(new Vector2(i3 + (15 * i), i4 + (15 * i2)));
-
-                                cells[i3 + (15 * i), i4 + (15 * i2)] = newCell;
-
-                            }else
-                            {
-                                cells[i3 + (15 * i), i4 + (15 * i2)] = null;
-                            }*/
                         }
                     }
                 }
             }
 
             return cells;
+        }
+
+        static Chunk[,] CellArrayToChunks(Cell[,] cells)
+        {
+            Chunk[,] chunks = new Chunk[3,3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int i2 = 0; i2 < 3; i2++)
+                {
+                    //Chunk ch = chunks[i, i2];
+                    //Debug.WriteLineIf(ch == null, "null");
+                    string[] arr = new string[15];
+                    for (int i3 = 0; i3 < 15; i3++)
+                    {
+
+                        for (int i4 = 0; i4 < 15; i4++)
+                        {
+
+                            if (loadedCellsArray[i3 + (15 * i), i4 + (15 * i2)] != null)
+                            {
+                                arr[i3] = arr[i3] + NameToId(loadedCellsArray[i3 + (15 * i), i4 + (15 * i2)].name).ToString() + ".";
+                            }
+                            else
+                            {
+                                arr[i3] = arr[i3] + "0" + ".";
+                            }
+                        }
+                    }
+                    chunks[i, i2] = new Chunk(arr, false);
+                }
+            }
+
+            return chunks;
         }
 
         public static void DebugChunk()
@@ -139,8 +202,42 @@ namespace Deep_Land
                     array[(int)position.X, (int)position.Y] = new Fluid("water", '≈', ConsoleColor.Cyan, position, 5);
                     break;
                 case 4:
-                    array[(int)position.X, (int)position.Y] = new Player("player", '@', ConsoleColor.Yellow, position, true, 10, 10, 1);
+                    array[(int)position.X, (int)position.Y] = new Player("player", '@', ConsoleColor.Yellow, position, edgePoint + position, true, 10, 10, 1);
                     break;
+            }
+        }
+
+        static int NameToId(string name)
+        {
+            int id = 0;
+
+            switch (name)
+            {
+                case "?":
+                    id = 0;
+                    break;
+                case "stone":
+                    id = 1;
+                    break;
+                case "gravel":
+                    id = 2;
+                    break;
+                case "water":
+                    id = 3;
+                    break;
+                case "player":
+                    id = 4;
+                    break;
+            }
+
+            return id;
+        }
+
+        public static void InstanciateAtPositionInArray(int id, Vector2 positionInArray)
+        {
+            if ((positionInArray.X <= 44 && positionInArray.X >= 0) && (positionInArray.Y <= 44 && positionInArray.Y >= 0))
+            {
+                CreateNewCell(id, positionInArray, loadedCellsArray);
             }
         }
     }
