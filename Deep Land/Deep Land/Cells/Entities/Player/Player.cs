@@ -20,7 +20,7 @@ namespace Deep_Land
         bool onGround;
 
         int count;
-        int jumpTime;
+        public int jumpTime;
         int count2;
 
         public Player(string _name, char _display, ConsoleColor _color, Vector2 _positionInArray, Vector2 _positionInWorld, bool _hasGravity, int _health = 10, int _maxHealth = 10, int _armour = 1) : base(_name, _display, _color, _positionInArray, _hasGravity, _health, _maxHealth, _armour)
@@ -111,6 +111,17 @@ namespace Deep_Land
         {
             hasGravity = false;
             isJumping = true;
+        }
+
+        public void ReloadJump(string t ,int _jumpTime)
+        {
+            if(t == "t")
+            {
+                hasGravity = false;
+                isJumping = true;
+                jumpTime = _jumpTime;
+                count2 = 10;
+            }
         }
 
         void UpdateJump()

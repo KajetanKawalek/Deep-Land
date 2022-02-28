@@ -123,9 +123,19 @@ namespace Deep_Land
                     {
                         for (int i4 = 0; i4 < 15; i4++)
                         {
-                            int id = int.Parse(ch.array[i3, i4]);
-
-                            CreateNewCell(id, new Vector2(i3 + (15 * i), i4 + (15 * i2)), cells);
+                            int id = 0;
+                            string[] str = new string[10];
+                            if (ch.array[i3, i4].Contains(","))
+                            {
+                                str = ch.array[i3, i4].Split(',');
+                                id = int.Parse(str[0]);
+                                CreateNewCell(id, new Vector2(i3 + (15 * i), i4 + (15 * i2)), cells, true, str);
+                            }
+                            else
+                            {
+                                id = int.Parse(ch.array[i3, i4]);
+                                CreateNewCell(id, new Vector2(i3 + (15 * i), i4 + (15 * i2)), cells, false, str);
+                            }
                         }
                     }
                 }
@@ -153,7 +163,7 @@ namespace Deep_Land
 
                             if (loadedCellsArray[i3 + (15 * i), i4 + (15 * i2)] != null)
                             {
-                                arr[i3] = arr[i3] + NameToId(loadedCellsArray[i3 + (15 * i), i4 + (15 * i2)].name).ToString() + ".";
+                                arr[i3] = arr[i3] + NameToId(i3 + (15 * i), i4 + (15 * i2));
                             }
                             else
                             {
@@ -185,7 +195,7 @@ namespace Deep_Land
             Console.ReadLine();
         }
 
-        static void CreateNewCell(int id, Vector2 position, Cell[,] array)
+        static void CreateNewCell(int id, Vector2 position, Cell[,] array, bool hasData, string[] data)
         {
             switch (id)
             {
@@ -202,31 +212,46 @@ namespace Deep_Land
                     array[(int)position.X, (int)position.Y] = new Fluid("water", '≈', ConsoleColor.Cyan, position, 5);
                     break;
                 case 4:
-                    array[(int)position.X, (int)position.Y] = new Player("player", '@', ConsoleColor.Yellow, position, edgePoint + position, true, 10, 10, 1);
+                    Player player = new Player("player", '@', ConsoleColor.Yellow, position, edgePoint + position, true, 10, 10, 1);
+                    if(hasData)
+                    {
+                        player.ReloadJump(data[1], int.Parse(data[2]));
+                    }
+                    array[(int)position.X, (int)position.Y] = player;
+
                     break;
             }
         }
 
-        static int NameToId(string name)
+        static string NameToId(int pos1, int pos2)
         {
-            int id = 0;
+            string name = loadedCellsArray[pos1, pos2].name;
+            string id = "";
 
             switch (name)
             {
                 case "?":
-                    id = 0;
+                    id = "0.";
                     break;
                 case "stone":
-                    id = 1;
+                    id = "1.";
                     break;
                 case "gravel":
-                    id = 2;
+                    id = "2.";
                     break;
                 case "water":
-                    id = 3;
+                    id = "3.";
                     break;
                 case "player":
-                    id = 4;
+                    Player player = (Player)loadedCellsArray[pos1, pos2];
+                    if(player.jumpTime == 0)
+                    {
+                        id = "4," + "f" + "," + player.jumpTime;
+                    }else
+                    {
+                        id = "4," + "t" + "," + player.jumpTime;
+                    }
+                    id = id + ".";
                     break;
             }
 
@@ -237,7 +262,7 @@ namespace Deep_Land
         {
             if ((positionInArray.X <= 44 && positionInArray.X >= 0) && (positionInArray.Y <= 44 && positionInArray.Y >= 0))
             {
-                CreateNewCell(id, positionInArray, loadedCellsArray);
+                CreateNewCell(id, positionInArray, loadedCellsArray, false, new string[10]);
             }
         }
     }

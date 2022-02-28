@@ -10,7 +10,6 @@ namespace Deep_Land
         public char display = '?';
         public ConsoleColor color = ConsoleColor.Magenta;
         public Vector2 positionInArray;
-        public Vector2 positionInWorld;
 
         public override void PreUpdate()
         {
