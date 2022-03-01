@@ -46,12 +46,23 @@ namespace Deep_Land
 
         public override void Update()
         {
+            //Attached Cells
+            ClearAttachedCells(positionInArray);
+            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y), 'I', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 1), '#', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 1), '#', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 2), '.', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 2), '.', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 3), '/', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 3), '\\', ConsoleColor.Yellow);
+
             //Check for floor
-            Cell floor = CheckCell(new Vector2(positionInArray.X, positionInArray.Y + 1));
+            /*Cell floor = CheckCell(new Vector2(positionInArray.X, positionInArray.Y + 1));
             if(!(floor is Fluid))
             {
                 onGround = CheckForNotEmpty(new Vector2(positionInArray.X, positionInArray.Y + 1));
-            }
+            }*/
+            onGround = BottomCollide();
 
             //Jump
             if (onGround && tryJump)
@@ -72,19 +83,19 @@ namespace Deep_Land
             {
                 if (count > 10)
                 {
-                    if (!CheckForCell(new Vector2(positionInArray.X, positionInArray.Y + 1)))
+                    if (!BottomCollide())
                     {
                         MoveTo(new Vector2(positionInArray.X, positionInArray.Y + 1));
                         positionInWorld.Y += 1;
                     }
-                    else
+                    /*else
                     {
                         if (CheckCell(new Vector2(positionInArray.X, positionInArray.Y + 1)) is Fluid)
                         {
                             SwitchPlace(new Vector2(positionInArray.X, positionInArray.Y + 1));
                             positionInWorld.Y += 1;
                         }
-                    }
+                    }*/
 
                     count = 0;
                 }
@@ -135,19 +146,24 @@ namespace Deep_Land
             }
             else if (count2 > 10)
             {
-                if (!CheckForCell(new Vector2(positionInArray.X, positionInArray.Y - 1)))
+                if (!TopCollide()) // If Every Element in returned array == null
                 {
                     MoveTo(new Vector2(positionInArray.X, positionInArray.Y - 1));
                     positionInWorld.Y -= 1;
                 }
-                else
+                /*else
                 {
                     if (CheckCell(new Vector2(positionInArray.X, positionInArray.Y - 1)) is Fluid)
                     {
                         SwitchPlace(new Vector2(positionInArray.X, positionInArray.Y - 1));
                         positionInWorld.Y -= 1;
                     }
-                }
+                    else if (CheckCell(new Vector2(positionInArray.X, positionInArray.Y - 1)).name == "?")
+                    {
+                        MoveTo(new Vector2(positionInArray.X, positionInArray.Y - 1));
+                        positionInWorld.Y -= 1;
+                    }
+                }*/
 
                 count2 = 0;
                 jumpTime++;
@@ -161,39 +177,115 @@ namespace Deep_Land
             {
                 if (movementDirection == -1)
                 {
-                    if (!CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y)))
+                    if (!LeftCollide())
                     {
                         MoveTo(new Vector2(positionInArray.X - 1, positionInArray.Y));
                         positionInWorld.X -= 1;
                     }
-                    else
+                    /*else
                     {
                         if (CheckCell(new Vector2(positionInArray.X - 1, positionInArray.Y)) is Fluid)
                         {
                             SwitchPlace(new Vector2(positionInArray.X - 1, positionInArray.Y));
                             positionInWorld.X -= 1;
                         }
-                    }
+                        else if (CheckCell(new Vector2(positionInArray.X - 1, positionInArray.Y)).name == "?")
+                        {
+                            MoveTo(new Vector2(positionInArray.X - 1, positionInArray.Y));
+                            positionInWorld.X -= 1;
+                        }
+                    }*/
                 }
                 else if (movementDirection == 1)
                 {
-                    if (!CheckForCell(new Vector2(positionInArray.X + 1, positionInArray.Y)))
+                    if (!RightCollide())
                     {
                         MoveTo(new Vector2(positionInArray.X + 1, positionInArray.Y));
                         positionInWorld.X += 1;
                     }
-                    else
+                    /*else
                     {
                         if (CheckCell(new Vector2(positionInArray.X + 1, positionInArray.Y)) is Fluid)
                         {
                             SwitchPlace(new Vector2(positionInArray.X + 1, positionInArray.Y));
                             positionInWorld.X += 1;
                         }
-                    }
+                        else if (CheckCell(new Vector2(positionInArray.X + 1, positionInArray.Y)).name == "?")
+                        {
+                            MoveTo(new Vector2(positionInArray.X + 1, positionInArray.Y));
+                            positionInWorld.X += 1;
+                        }
+                    }*/
                 }
                 count = 0;
             }
             count++;
         }
+
+        bool RightCollide() // Change to check cell
+        {
+            if (CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y)) ||
+               CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y - 1)) ||
+               CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y - 2)) ||
+               CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y - 3)))
+                return true;
+            return false;
+        }
+
+        bool LeftCollide()
+        {
+            if (CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y)) ||
+               CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y - 1)) ||
+               CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y - 2)) ||
+               CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y - 3)))
+                return true;
+            return false;
+        }
+
+        bool BottomCollide()
+        {
+            if (CheckForCell(new Vector2(positionInArray.X, positionInArray.Y + 1)) ||
+               CheckForCell(new Vector2(positionInArray.X + 1, positionInArray.Y + 1)))
+                return true;
+            return false;
+        }
+
+        bool TopCollide()
+        {
+            if (CheckForCell(new Vector2(positionInArray.X, positionInArray.Y - 4)) ||
+               CheckForCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 4)))
+                return true;
+            return false;
+        }
+
+        /*void DisplaceRightWater()
+        {
+            if (CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y)) ||
+               CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y - 1)) ||
+               CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y - 2)) ||
+               CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y - 3)))
+
+
+        }
+
+        void DisplaceLeftWater()
+        {
+            if (CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y)) ||
+               CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y - 1)) ||
+               CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y - 2)) ||
+               CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y - 3)))
+        }
+
+        void DisplaceBottomWater()
+        {
+            if (CheckForCell(new Vector2(positionInArray.X, positionInArray.Y + 1)) ||
+               CheckForCell(new Vector2(positionInArray.X + 1, positionInArray.Y + 1)))
+        }
+
+        void DisplaceTopWater()
+        {
+            if (CheckForCell(new Vector2(positionInArray.X, positionInArray.Y - 4)) ||
+               CheckForCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 4)))
+        }*/
     }
 }

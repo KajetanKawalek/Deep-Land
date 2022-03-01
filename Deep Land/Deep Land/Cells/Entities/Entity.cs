@@ -70,5 +70,77 @@ namespace Deep_Land
 
             heath -= damageToTake;
         }
+
+        public void MoveIntoFluid(Vector2 translation, Vector2 entitySize)
+        {
+            if(translation.X == 1)
+            {
+                List<Cell> cells = new List<Cell>();
+                for(int i = 0; i < entitySize.Y; i++)
+                {
+                    cells.Add(World.loadedCellsArray[(int)positionInArray.X + (int)entitySize.X, (int)positionInArray.Y - i]);
+                }
+
+                World.loadedCellsArray[(int)positionInArray.X + (int)translation.X, (int)positionInArray.Y + (int)translation.Y] = this;
+
+                for (int i = 0; i < entitySize.Y; i++)
+                {
+                    cells[i].MoveTo(new Vector2(cells[i].positionInArray.X - entitySize.X - 1, cells[i].positionInArray.Y), true);
+                }
+
+                positionInArray = positionInArray + translation;
+            }
+            if (translation.X == -1)
+            {
+                List<Cell> cells = new List<Cell>();
+                for (int i = 0; i < entitySize.Y; i++)
+                {
+                    cells.Add(World.loadedCellsArray[(int)positionInArray.X - 1, (int)positionInArray.Y - i]);
+                }
+
+                World.loadedCellsArray[(int)positionInArray.X + (int)translation.X, (int)positionInArray.Y + (int)translation.Y] = this;
+
+                for (int i = 0; i < entitySize.Y; i++)
+                {
+                    cells[i].MoveTo(new Vector2(cells[i].positionInArray.X + entitySize.X + 1, cells[i].positionInArray.Y), true);
+                }
+
+                positionInArray = positionInArray + translation;
+            }
+            if (translation.Y == 1)
+            {
+                List<Cell> cells = new List<Cell>();
+                for (int i = 0; i < entitySize.X; i++)
+                {
+                    cells.Add(World.loadedCellsArray[(int)positionInArray.X + i, (int)positionInArray.Y + 1]);
+                }
+
+                World.loadedCellsArray[(int)positionInArray.X + (int)translation.X, (int)positionInArray.Y + (int)translation.Y] = this;
+
+                for (int i = 0; i < entitySize.X; i++)
+                {
+                    cells[i].MoveTo(new Vector2(cells[i].positionInArray.X, cells[i].positionInArray.Y - entitySize.Y - 1), true);
+                }
+
+                positionInArray = positionInArray + translation;
+            }
+            if (translation.Y == -1)
+            {
+                List<Cell> cells = new List<Cell>();
+                for (int i = 0; i < entitySize.X; i++)
+                {
+                    cells.Add(World.loadedCellsArray[(int)positionInArray.X + i, (int)positionInArray.Y + (int)entitySize.Y]);
+                }
+
+                World.loadedCellsArray[(int)positionInArray.X + (int)translation.X, (int)positionInArray.Y + (int)translation.Y] = this;
+
+                for (int i = 0; i < entitySize.X; i++)
+                {
+                    cells[i].MoveTo(new Vector2(cells[i].positionInArray.X, cells[i].positionInArray.Y + entitySize.Y + 1), true);
+                }
+
+                positionInArray = positionInArray + translation;
+            }
+        }
     }
 }
