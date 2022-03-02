@@ -23,7 +23,7 @@ namespace Deep_Land
         public int jumpTime;
         int count2;
 
-        public Player(string _name, char _display, ConsoleColor _color, Vector2 _positionInArray, Vector2 _positionInWorld, bool _hasGravity, int _health = 10, int _maxHealth = 10, int _armour = 1) : base(_name, _display, _color, _positionInArray, _hasGravity, _health, _maxHealth, _armour)
+        public Player(string _name, char _display, ConsoleColor _color, Vector2 _positionInArray, Vector2 _positionInWorld, bool _hasGravity, Vector2 _size, int _health = 10, int _maxHealth = 10, int _armour = 1) : base(_name, _display, _color, _positionInArray, _hasGravity, _size, _health, _maxHealth, _armour)
         {
             positionInWorld = _positionInWorld;
             lastPositionInWorld = _positionInWorld;
@@ -48,13 +48,13 @@ namespace Deep_Land
         {
             //Attached Cells
             ClearAttachedCells(positionInArray);
-            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y), 'I', ConsoleColor.Yellow);
-            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 1), '#', ConsoleColor.Yellow);
-            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 1), '#', ConsoleColor.Yellow);
-            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 2), '.', ConsoleColor.Yellow);
-            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 2), '.', ConsoleColor.Yellow);
-            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 3), '/', ConsoleColor.Yellow);
-            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 3), '\\', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y), '│', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 1), '▐', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 1), '▌', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 2), 'º', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 2), 'º', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 3), '╓', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 3), '╖', ConsoleColor.Yellow);
 
             //Check for floor
             /*Cell floor = CheckCell(new Vector2(positionInArray.X, positionInArray.Y + 1));
@@ -62,7 +62,7 @@ namespace Deep_Land
             {
                 onGround = CheckForNotEmpty(new Vector2(positionInArray.X, positionInArray.Y + 1));
             }*/
-            onGround = BottomCollide();
+            onGround = BottomCollide().OfType<Cell>().Any();
 
             //Jump
             if (onGround && tryJump)
@@ -83,9 +83,14 @@ namespace Deep_Land
             {
                 if (count > 10)
                 {
-                    if (!BottomCollide())
+                    if (BottomCollide().All(n => n == null))
                     {
                         MoveTo(new Vector2(positionInArray.X, positionInArray.Y + 1));
+                        positionInWorld.Y += 1;
+                    }
+                    else if (BottomCollide().All(n => n is Fluid || n == null))
+                    {
+                        MoveAndDisplace(new Vector2(0, 1));
                         positionInWorld.Y += 1;
                     }
                     /*else
@@ -124,9 +129,9 @@ namespace Deep_Land
             isJumping = true;
         }
 
-        public void ReloadJump(string t ,int _jumpTime)
+        public void ReloadJump(string t, int _jumpTime)
         {
-            if(t == "t")
+            if (t == "t")
             {
                 hasGravity = false;
                 isJumping = true;
@@ -146,9 +151,14 @@ namespace Deep_Land
             }
             else if (count2 > 10)
             {
-                if (!TopCollide()) // If Every Element in returned array == null
+                if (TopCollide().All(n => n == null))
                 {
                     MoveTo(new Vector2(positionInArray.X, positionInArray.Y - 1));
+                    positionInWorld.Y -= 1;
+                }
+                else if (TopCollide().All(n => n is Fluid))
+                {
+                    MoveAndDisplace(new Vector2(0, -1));
                     positionInWorld.Y -= 1;
                 }
                 /*else
@@ -177,9 +187,14 @@ namespace Deep_Land
             {
                 if (movementDirection == -1)
                 {
-                    if (!LeftCollide())
+                    if (LeftCollide().All(n => n == null))
                     {
                         MoveTo(new Vector2(positionInArray.X - 1, positionInArray.Y));
+                        positionInWorld.X -= 1;
+                    }
+                    else if (LeftCollide().All(n => n is Fluid))
+                    {
+                        MoveAndDisplace(new Vector2(-1, 0));
                         positionInWorld.X -= 1;
                     }
                     /*else
@@ -198,9 +213,14 @@ namespace Deep_Land
                 }
                 else if (movementDirection == 1)
                 {
-                    if (!RightCollide())
+                    if (RightCollide().All(n => n == null))
                     {
                         MoveTo(new Vector2(positionInArray.X + 1, positionInArray.Y));
+                        positionInWorld.X += 1;
+                    }
+                    else if (RightCollide().All(n => n is Fluid))
+                    {
+                        MoveAndDisplace(new Vector2(1, 0));
                         positionInWorld.X += 1;
                     }
                     /*else
@@ -221,71 +241,5 @@ namespace Deep_Land
             }
             count++;
         }
-
-        bool RightCollide() // Change to check cell
-        {
-            if (CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y)) ||
-               CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y - 1)) ||
-               CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y - 2)) ||
-               CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y - 3)))
-                return true;
-            return false;
-        }
-
-        bool LeftCollide()
-        {
-            if (CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y)) ||
-               CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y - 1)) ||
-               CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y - 2)) ||
-               CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y - 3)))
-                return true;
-            return false;
-        }
-
-        bool BottomCollide()
-        {
-            if (CheckForCell(new Vector2(positionInArray.X, positionInArray.Y + 1)) ||
-               CheckForCell(new Vector2(positionInArray.X + 1, positionInArray.Y + 1)))
-                return true;
-            return false;
-        }
-
-        bool TopCollide()
-        {
-            if (CheckForCell(new Vector2(positionInArray.X, positionInArray.Y - 4)) ||
-               CheckForCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 4)))
-                return true;
-            return false;
-        }
-
-        /*void DisplaceRightWater()
-        {
-            if (CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y)) ||
-               CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y - 1)) ||
-               CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y - 2)) ||
-               CheckForCell(new Vector2(positionInArray.X + 2, positionInArray.Y - 3)))
-
-
-        }
-
-        void DisplaceLeftWater()
-        {
-            if (CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y)) ||
-               CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y - 1)) ||
-               CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y - 2)) ||
-               CheckForCell(new Vector2(positionInArray.X - 1, positionInArray.Y - 3)))
-        }
-
-        void DisplaceBottomWater()
-        {
-            if (CheckForCell(new Vector2(positionInArray.X, positionInArray.Y + 1)) ||
-               CheckForCell(new Vector2(positionInArray.X + 1, positionInArray.Y + 1)))
-        }
-
-        void DisplaceTopWater()
-        {
-            if (CheckForCell(new Vector2(positionInArray.X, positionInArray.Y - 4)) ||
-               CheckForCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 4)))
-        }*/
     }
 }
