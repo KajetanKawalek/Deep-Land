@@ -12,8 +12,6 @@ namespace Deep_Land
         public ConsoleColor color = ConsoleColor.Magenta;
         public Vector2 positionInArray;
 
-        List<Cell> attachedCells = new List<Cell>();
-
         public override void PreUpdate()
         {
 
@@ -87,26 +85,6 @@ namespace Deep_Land
             {
                 return null;
             }
-        }
-
-        public void CreateAttachedCell(Vector2 positionInArray, char display, ConsoleColor color)
-        {
-            if(!CheckForCell(positionInArray))
-            {
-                Block cell = new Block("?", display, color, positionInArray);
-                World.loadedCellsArray[(int)positionInArray.X, (int)positionInArray.Y] = cell;
-                attachedCells.Add(cell);
-            }
-        }
-
-        public void ClearAttachedCells(Vector2 CoreCellPosition)
-        {
-            foreach (Cell cell in attachedCells)
-            {
-                if(cell.positionInArray != CoreCellPosition)
-                    World.loadedCellsArray[(int)cell.positionInArray.X, (int)cell.positionInArray.Y] = null;
-            }
-            attachedCells.Clear();
         }
     }
 }

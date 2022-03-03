@@ -48,13 +48,13 @@ namespace Deep_Land
         {
             //Attached Cells
             ClearAttachedCells(positionInArray);
-            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y), '│', ConsoleColor.Yellow);
-            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 1), '▐', ConsoleColor.Yellow);
-            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 1), '▌', ConsoleColor.Yellow);
-            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 2), 'º', ConsoleColor.Yellow);
-            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 2), 'º', ConsoleColor.Yellow);
-            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 3), '╓', ConsoleColor.Yellow);
-            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 3), '╖', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y), '⌊', ConsoleColor.DarkYellow);
+            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 1), '⎛', ConsoleColor.DarkGreen);
+            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 1), '⎞', ConsoleColor.DarkGreen);
+            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 2), '⋅', ConsoleColor.White);
+            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 2), '⋅', ConsoleColor.White);
+            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 3), '╱', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 3), '╲', ConsoleColor.Yellow);
 
             //Check for floor
             /*Cell floor = CheckCell(new Vector2(positionInArray.X, positionInArray.Y + 1));
@@ -156,7 +156,7 @@ namespace Deep_Land
                     MoveTo(new Vector2(positionInArray.X, positionInArray.Y - 1));
                     positionInWorld.Y -= 1;
                 }
-                else if (TopCollide().All(n => n is Fluid))
+                else if (TopCollide().All(n => n is Fluid || n == null))
                 {
                     MoveAndDisplace(new Vector2(0, -1));
                     positionInWorld.Y -= 1;
@@ -192,7 +192,7 @@ namespace Deep_Land
                         MoveTo(new Vector2(positionInArray.X - 1, positionInArray.Y));
                         positionInWorld.X -= 1;
                     }
-                    else if (LeftCollide().All(n => n is Fluid))
+                    else if (LeftCollide().All(n => n is Fluid || n == null))
                     {
                         MoveAndDisplace(new Vector2(-1, 0));
                         positionInWorld.X -= 1;
@@ -218,7 +218,7 @@ namespace Deep_Land
                         MoveTo(new Vector2(positionInArray.X + 1, positionInArray.Y));
                         positionInWorld.X += 1;
                     }
-                    else if (RightCollide().All(n => n is Fluid))
+                    else if (RightCollide().All(n => n is Fluid || n == null))
                     {
                         MoveAndDisplace(new Vector2(1, 0));
                         positionInWorld.X += 1;

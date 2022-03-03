@@ -212,7 +212,7 @@ namespace Deep_Land
                     array[(int)position.X, (int)position.Y] = new Fluid("water", '≈', ConsoleColor.Cyan, position, 5);
                     break;
                 case 4:
-                    Player player = new Player("player", '│', ConsoleColor.Yellow, position, edgePoint + position, true, new Vector2(2, 4), 10, 10, 1);
+                    Player player = new Player("player", '⌋', ConsoleColor.DarkYellow, position, edgePoint + position, true, new Vector2(2, 4), 10, 10, 1);
                     if(hasData)
                     {
                         player.ReloadJump(data[1], int.Parse(data[2]));

@@ -17,6 +17,8 @@ namespace Deep_Land
 
         int count;
 
+        List<Cell> attachedCells = new List<Cell>();
+
         public Entity(string _name, char _display, ConsoleColor _color, Vector2 _positionInArray, bool _hasGravity, Vector2 _size, int _health = 10, int _maxHealth = 10, int _armour = 1)
         {
             name = _name;
@@ -166,7 +168,12 @@ namespace Deep_Land
                 foreach (Cell cell in cells)
                 {
                     if (cell != null)
-                        cell.MoveTo(new Vector2(cell.positionInArray.X - size.X, cell.positionInArray.Y), true);
+                    {
+                        if (cell.positionInArray == positionInArray)
+                            cell.MoveTo(new Vector2(cell.positionInArray.X - size.X, cell.positionInArray.Y), false);
+                        else
+                            cell.MoveTo(new Vector2(cell.positionInArray.X - size.X, cell.positionInArray.Y), true);
+                    }
                 }
             }
             if (translation.X == -1)
@@ -178,7 +185,12 @@ namespace Deep_Land
                 foreach (Cell cell in cells)
                 {
                     if (cell != null)
-                        cell.MoveTo(new Vector2(cell.positionInArray.X + size.X, cell.positionInArray.Y), true);
+                    {
+                        if (cell.positionInArray == positionInArray)
+                            cell.MoveTo(new Vector2(cell.positionInArray.X + size.X, cell.positionInArray.Y), false);
+                        else
+                            cell.MoveTo(new Vector2(cell.positionInArray.X + size.X, cell.positionInArray.Y), true);
+                    }
                 }
             }
             if (translation.Y == 1)
@@ -189,8 +201,13 @@ namespace Deep_Land
 
                 foreach (Cell cell in cells)
                 {
-                    if(cell != null)
-                        cell.MoveTo(new Vector2(cell.positionInArray.X, cell.positionInArray.Y - size.Y), true);
+                    if (cell != null)
+                    {
+                        if (cell.positionInArray == positionInArray)
+                            cell.MoveTo(new Vector2(cell.positionInArray.X, cell.positionInArray.Y - size.Y), false);
+                        else
+                            cell.MoveTo(new Vector2(cell.positionInArray.X, cell.positionInArray.Y - size.Y), true);
+                    }
                 }
             }
             if (translation.Y == -1)
@@ -202,7 +219,12 @@ namespace Deep_Land
                 foreach (Cell cell in cells)
                 {
                     if (cell != null)
-                        cell.MoveTo(new Vector2(cell.positionInArray.X, cell.positionInArray.Y + size.Y), true);
+                    {
+                        if (cell.positionInArray == positionInArray)
+                            cell.MoveTo(new Vector2(cell.positionInArray.X, cell.positionInArray.Y + size.Y), false);
+                        else
+                            cell.MoveTo(new Vector2(cell.positionInArray.X, cell.positionInArray.Y + size.Y), true);
+                    }
                 }
             }
         }
@@ -221,6 +243,26 @@ namespace Deep_Land
                 }
             }
         }*/
+
+        public void CreateAttachedCell(Vector2 positionInArray, char display, ConsoleColor color)
+        {
+            if (!CheckForCell(positionInArray))
+            {
+                Block cell = new Block("?", display, color, positionInArray);
+                World.loadedCellsArray[(int)positionInArray.X, (int)positionInArray.Y] = cell;
+                attachedCells.Add(cell);
+            }
+        }
+
+        public void ClearAttachedCells(Vector2 CoreCellPosition)
+        {
+            foreach (Cell cell in attachedCells)
+            {
+                if (cell.positionInArray != CoreCellPosition && World.loadedCellsArray[(int)cell.positionInArray.X, (int)cell.positionInArray.Y] == cell)
+                    World.loadedCellsArray[(int)cell.positionInArray.X, (int)cell.positionInArray.Y] = null;
+            }
+            attachedCells.Clear();
+        }
 
         public Cell[] RightCollide()
         {

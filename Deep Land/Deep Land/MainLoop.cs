@@ -31,6 +31,7 @@ namespace Deep_Land
 
         static void Start()
         {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.CursorVisible = false;
             Console.SetCursorPosition(0, 0);
             FastConsole.Init(45, 45); // One chunk = 15x15;

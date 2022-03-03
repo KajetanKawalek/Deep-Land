@@ -176,7 +176,7 @@ namespace Deep_Land
         }
 
 
-        public static void SetConsoleFont(string fontName = "Consolas", short w = 20, short h = 20)
+        public static void SetConsoleFont(string fontName = "DejaVu Sans Mono", short w = 20, short h = 20)
         {
             CONSOLE_FONT_INFO_EX ConsoleFontInfo = new CONSOLE_FONT_INFO_EX()
             {
