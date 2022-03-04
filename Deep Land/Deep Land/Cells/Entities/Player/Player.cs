@@ -17,7 +17,7 @@ namespace Deep_Land
         bool isJumping;
         bool onGround;
 
-        int countgravity;
+        int count;
 
         public int jumpTime;
 
@@ -42,6 +42,10 @@ namespace Deep_Land
 
         public override void Update()
         {
+            if (count > 100)
+                count = 0;
+            count++;
+
             //Attached Cells
             ClearAttachedCells(positionInArray);
             CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y), '⌊', ConsoleColor.DarkYellow);
@@ -53,17 +57,11 @@ namespace Deep_Land
             CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 3), '╲', ConsoleColor.Yellow);
 
             //Check for floor
-            /*Cell floor = CheckCell(new Vector2(positionInArray.X, positionInArray.Y + 1));
-            if(!(floor is Fluid))
-            {
-                onGround = CheckForNotEmpty(new Vector2(positionInArray.X, positionInArray.Y + 1));
-            }*/
-            onGround = !BottomCollide().OfType<Cell>().Any(n => n == null || n is Fluid);
-
+            onGround = !BottomCollide().OfType<Cell>().All(n => n == null || n is Fluid);
 
             Debug.WriteLine("frame");
 
-            if (MainLoop.count % 5 == 0)
+            if (count % 5 == 0)
             {
                 //Jump
                 if (onGround && tryJump)
@@ -82,21 +80,12 @@ namespace Deep_Land
                 tryJump = false;
             }
 
-            if (MainLoop.count % 10 == 0)
+            if (count % 10 == 0)
             {
                 //Move
                 Move();
 
                 movementDirection = 0;
-            }
-
-            if (countgravity > 5)
-            {
-                //Gravity();
-                countgravity = 0;
-            }else
-            {
-                countgravity++;
             }
         }
 

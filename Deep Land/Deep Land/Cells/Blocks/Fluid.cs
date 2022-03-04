@@ -6,7 +6,6 @@ namespace Deep_Land
     class Fluid : Cell
     {
         int count;
-        int count2;
 
         int moveTime;
 
@@ -28,18 +27,19 @@ namespace Deep_Land
 
         public override void Update()
         {
-            if (count > moveTime)
+            if (count > 100)
+                count = 0;
+            count++;
+
+            if (count % moveTime == 0)
             {
                 if (!CheckForCell(new Vector2(positionInArray.X, positionInArray.Y + 1)))
                 {
                     MoveTo(new Vector2(positionInArray.X, positionInArray.Y + 1));
                 }
-
-                count = 0;
             }
-            count++;
 
-            if (count2 > moveTime * 2)
+            if (count % (moveTime * 2) == 0)
             {
                 if (CheckForNotEmpty(new Vector2(positionInArray.X, positionInArray.Y + 1)))
                 {
@@ -60,9 +60,7 @@ namespace Deep_Land
                         }
                     }
                 }
-                count2 = 0;
             }
-            count2++;
         }
 
         public override void PostUpdate()

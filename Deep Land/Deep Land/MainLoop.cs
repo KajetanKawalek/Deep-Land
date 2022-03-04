@@ -7,7 +7,6 @@ namespace Deep_Land
     public static class MainLoop
     {
         static double timeStep = 10; // In Milliseconds
-        static public int count { get; private set; } = 1;
 
         static Stopwatch stopwatch = new Stopwatch();
 
@@ -25,9 +24,6 @@ namespace Deep_Land
                 Update();
                 PostUpdate();
                 Render();
-                if(count > 100)
-                    count = 0;
-                count++;
 
                 while (stopwatch.ElapsedMilliseconds < timeStep) ;
             }
