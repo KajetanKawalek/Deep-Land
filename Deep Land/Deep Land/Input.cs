@@ -33,10 +33,16 @@ namespace Deep_Land
         //https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
         public enum Keys : short
         {
-            A = 0x41,
             W = 0x57,
-            D = 0x44,
+            A = 0x41,
             S = 0x53,
+            D = 0x44,
+
+            Up = 0x26,
+            Left = 0x25,
+            Down = 0x28,
+            Right = 0x27,
+
             SpaceBar = 0x20,
             Esc = 0x1B,
             End = 0x23

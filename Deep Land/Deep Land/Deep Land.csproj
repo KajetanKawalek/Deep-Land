@@ -55,7 +55,9 @@
     <Compile Include="Cells\Entities\Player\Player.cs" />
     <Compile Include="FastConsole.cs" />
     <Compile Include="Input.cs" />
+    <Compile Include="Items\Item.cs" />
     <Compile Include="MainLoop.cs" />
+    <Compile Include="PlayerData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>

@@ -59,8 +59,6 @@ namespace Deep_Land
             //Check for floor
             onGround = !BottomCollide().OfType<Cell>().All(n => n == null || n is Fluid);
 
-            Debug.WriteLine("frame");
-
             if (count % 5 == 0)
             {
                 //Jump
@@ -99,6 +97,7 @@ namespace Deep_Land
             {
                 World.SaveLoadedCells();
                 World.LoadCells(positionInWorld);
+                PlayerData.AssignPlayer();
             }
 
             lastPositionInWorld = positionInWorld;

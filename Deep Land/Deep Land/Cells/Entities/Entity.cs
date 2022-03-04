@@ -48,14 +48,12 @@ namespace Deep_Land
 
         protected void Gravity()
         {
-            Debug.WriteLine("5");
             if (hasGravity)
             {
                 if (BottomCollide().All(n => n == null))
                 {
                     MoveTo(new Vector2(positionInArray.X, positionInArray.Y + 1));
                     positionInWorld.Y += 1;
-                    Debug.WriteLine(positionInWorld);
                 }
                 else if (BottomCollide().All(n => n is Fluid || n == null))
                 {

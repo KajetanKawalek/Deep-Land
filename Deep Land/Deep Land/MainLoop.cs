@@ -41,12 +41,14 @@ namespace Deep_Land
             World.Init(new Vector2(45, 45));
             World.LoadCells(new Vector2(16, 16));
 
+            PlayerData.AssignPlayer();
             //World.InstanciateAtPositionInArray(4, new Vector2(16, 16));
         }
 
         static void PreUpdate()
         {
             Input.Update();
+            PlayerData.PreUpdate();
 
             foreach (Base cell in World.loadedCellsArray)
             {
@@ -59,6 +61,8 @@ namespace Deep_Land
 
         static void Update()
         {
+            PlayerData.Update();
+
             foreach(Base cell in World.loadedCellsArray)
             {
                 if(cell != null)
@@ -92,6 +96,7 @@ namespace Deep_Land
                 }
             }
 
+            PlayerData.Render();
             FastConsole.Draw();
         }
     }
