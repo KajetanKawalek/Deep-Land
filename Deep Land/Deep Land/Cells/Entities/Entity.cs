@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Numerics;
+using System.Diagnostics;
 
 namespace Deep_Land
 {
@@ -14,8 +13,7 @@ namespace Deep_Land
         protected int armour = 1;
         protected bool hasGravity;
         protected Vector2 size;
-
-        int count;
+        protected Vector2 positionInWorld;
 
         List<Cell> attachedCells = new List<Cell>();
 
@@ -30,6 +28,7 @@ namespace Deep_Land
             maxHealth = _maxHealth;
             armour = _armour;
             size = _size;
+            positionInWorld = positionInArray + World.edgePoint;
         }
 
         public override void PreUpdate()
@@ -39,31 +38,31 @@ namespace Deep_Land
 
         public override void Update()
         {
-            if(hasGravity)
-            {
-                if (count > 10)
-                {
-                    if (!CheckForCell(new Vector2(positionInArray.X, positionInArray.Y + 1)))
-                    {
-                        MoveTo(new Vector2(positionInArray.X, positionInArray.Y + 1));
-                    }
-                    else
-                    {
-                        if (CheckCell(new Vector2(positionInArray.X, positionInArray.Y + 1)) is Fluid)
-                        {
-                            SwitchPlace(new Vector2(positionInArray.X, positionInArray.Y + 1));
-                        }
-                    }
 
-                    count = 0;
-                }
-                count++;
-            }
         }
 
         public override void PostUpdate()
         {
 
+        }
+
+        protected void Gravity()
+        {
+            Debug.WriteLine("5");
+            if (hasGravity)
+            {
+                if (BottomCollide().All(n => n == null))
+                {
+                    MoveTo(new Vector2(positionInArray.X, positionInArray.Y + 1));
+                    positionInWorld.Y += 1;
+                    Debug.WriteLine(positionInWorld);
+                }
+                else if (BottomCollide().All(n => n is Fluid || n == null))
+                {
+                    MoveAndDisplace(new Vector2(0, 1));
+                    positionInWorld.Y += 1;
+                }
+            }
         }
 
         public void TakeDamage(int damage)

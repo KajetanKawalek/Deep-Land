@@ -9,7 +9,7 @@ namespace Deep_Land
 {
     static class World
     {
-        static Vector2 edgePoint;
+        public static Vector2 edgePoint { get; private set; }
         static Vector2 middlePoint;
         static Vector2 worldSize;
         public static Cell[,] loadedCellsArray = new Cell[45, 45];
