@@ -46,6 +46,11 @@ namespace Deep_Land
 
         }
 
+        public virtual void OnInteract()
+        {
+
+        }
+
         protected void Gravity()
         {
             if (hasGravity)

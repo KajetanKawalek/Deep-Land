@@ -11,6 +11,13 @@ namespace Deep_Land
     {
         static int currentPage = 1;
 
+        static bool showPrompt = true;
+
+        static string promptText = "Hello#Second Line"; //max 41 char per line
+        static string promptLabel = "-Prompt-";
+        static string[] promptOptions = {"Option 1", "Option 2" };
+        static Action[,] promptActions;
+
         public static void Update()
         {
 
@@ -21,7 +28,13 @@ namespace Deep_Land
             DrawBorder(new Vector2(45, 0), new Vector2(45, 45), ConsoleColor.DarkGray);
 
             Stats();
-            Inventory();
+            if(!showPrompt)
+            {
+                Inventory();
+            }else
+            {
+                Prompt();
+            }
             Chat();
             Menu();
         }
@@ -30,14 +43,22 @@ namespace Deep_Land
         {
             DrawBorder(new Vector2(46, 1), new Vector2(21, 10), ConsoleColor.DarkGray);
             DrawText(new Vector2(53, 1), "-STATS-", ConsoleColor.DarkGray);
-            DrawText(new Vector2(47, 2), "Level: " + PlayerData.level, ConsoleColor.DarkCyan);
-            DrawText(new Vector2(50, 3), "XP: " + PlayerData.xp + "/" + PlayerData.xpToNextLevel, ConsoleColor.DarkCyan);
+            DrawText(new Vector2(50, 2), "Level: " + PlayerData.level, ConsoleColor.DarkCyan);
+            DrawText(new Vector2(53, 3), "XP: " + PlayerData.xp + "/" + PlayerData.xpToNextLevel, ConsoleColor.DarkCyan);
             DrawText(new Vector2(49, 4), "Health: " + PlayerData.health + "/" + PlayerData.maxHealth, ConsoleColor.White);
             DrawText(new Vector2(49, 5), "Armour: " + PlayerData.armour, ConsoleColor.White);
             DrawText(new Vector2(51, 6), "Mana: " + PlayerData.mana + "/" + PlayerData.maxMana, ConsoleColor.White);
             DrawText(new Vector2(47, 7), "Strength: " + PlayerData.strength, ConsoleColor.White);
             DrawText(new Vector2(50, 8), "Intel: " + PlayerData.intelligence, ConsoleColor.White);
             DrawText(new Vector2(51, 9), "Dext: " + PlayerData.dexterity, ConsoleColor.White);
+        }
+
+        public static void DisplayPrompt(string text, string label, string[] options, Action[,] actions)
+        {
+            promptText = text;
+            promptLabel = label;
+            promptOptions = options;
+            promptActions = actions;
         }
 
         static void Inventory()
@@ -60,6 +81,27 @@ namespace Deep_Land
                 }
             }
             DrawText(new Vector2(62, 22), "Page " + currentPage + ": -/=", ConsoleColor.White);
+        }
+
+        static void Prompt()
+        {
+            DrawBorder(new Vector2(46, 11), new Vector2(43, 13), ConsoleColor.DarkGray);
+            DrawText(new Vector2(67 - (promptLabel.Length/2), 11), promptLabel, ConsoleColor.DarkGray);
+
+            string[] arr = promptText.Split('#');
+
+            int TextEnd = 12;
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                DrawText(new Vector2(47, 12 + i), arr[i], ConsoleColor.White);
+                TextEnd++;
+            }
+
+            for (int i = 0; i < promptOptions.Length; i++)
+            {
+                DrawText(new Vector2(47, TextEnd + i + 1), (i + 1) + ": " + promptOptions[i], ConsoleColor.White);
+            }
         }
 
         static void Chat()

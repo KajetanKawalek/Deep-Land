@@ -46,12 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\Action.cs" />
     <Compile Include="Base.cs" />
     <Compile Include="Cells\Blocks\Block.cs" />
     <Compile Include="Cells\Blocks\Fluid.cs" />
     <Compile Include="Cells\Blocks\Powder.cs" />
     <Compile Include="Cells\Cell.cs" />
     <Compile Include="Cells\Entities\Entity.cs" />
+    <Compile Include="Cells\Entities\Misc\ItemBag.cs" />
     <Compile Include="Cells\Entities\Player\Player.cs" />
     <Compile Include="FastConsole.cs" />
     <Compile Include="Input.cs" />
