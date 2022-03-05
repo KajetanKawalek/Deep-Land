@@ -136,7 +136,7 @@ namespace Deep_Land
                 charBuffer[i] = new CharInfo()
                 {
                     Attributes = (ushort)ConsoleColor.DarkBlue,
-                    Char = new CharUnion() { AsciiChar = (byte)'?' }
+                    Char = new CharUnion() { AsciiChar = (byte)' ' }
                 };
             }
             drawRect = new SmallRect { Left = 0, Top = 0, Right = (short)w, Bottom = (short)h };

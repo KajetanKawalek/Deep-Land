@@ -12,7 +12,20 @@ namespace Deep_Land
     {
         static Player player;
 
-        static Item[] inventory;
+        public static int health { get; private set; } = 1000;
+        public static int maxHealth { get; private set; } = 1000;
+        public static int armour { get; private set; } = 1;
+        public static int mana { get; private set; } = 5;
+        public static int maxMana { get; private set; } = 5;
+        public static int strength { get; private set; } = 5;
+        public static int intelligence { get; private set; } = 5;
+        public static int dexterity { get; private set; } = 5;
+
+        public static int level { get; private set; }
+        public static int xp { get; private set; }
+        public static int xpToNextLevel { get; private set; }
+
+        public static Item[] inventory { get; private set; } = new Item[30];
 
         static int count;
         static int cursorMoveTime = 15;
@@ -41,7 +54,14 @@ namespace Deep_Land
 
         public static void Update()
         {
-            if(cursorMovement != Vector2.Zero)
+            MoveCursor();
+
+
+        }
+
+        static void MoveCursor()
+        {
+            if (cursorMovement != Vector2.Zero)
             {
                 if (count == 0)
                 {
@@ -66,15 +86,16 @@ namespace Deep_Land
                     cursorMovement = Vector2.Zero;
                 }
                 count++;
-                if(count >= cursorMoveTime)
+                if (count >= cursorMoveTime)
                 {
-                    cursorMoveTime = 2;
+                    cursorMoveTime = 5;
                     count = 0;
                 }
-            }else
+            }
+            else
             {
                 count = 0;
-                cursorMoveTime = 15;
+                cursorMoveTime = 5;
             }
 
             cursorPositionInArray = player.positionInArray + cursorPosition;
@@ -82,7 +103,7 @@ namespace Deep_Land
 
         public static void Render()
         {
-            FastConsole.WriteToBuffer((int)(player.positionInArray.X + cursorPosition.X), (int)(player.positionInArray.Y + cursorPosition.Y), 'x', ConsoleColor.Red);
+            FastConsole.WriteToBuffer((int)(player.positionInArray.X + cursorPosition.X), (int)(player.positionInArray.Y + cursorPosition.Y), '╳', ConsoleColor.Red);
         }
 
         static Cell FindCellInLoadedCells<T>()

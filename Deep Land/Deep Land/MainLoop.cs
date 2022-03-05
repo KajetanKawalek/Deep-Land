@@ -31,10 +31,9 @@ namespace Deep_Land
 
         static void Start()
         {
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.CursorVisible = false;
             Console.SetCursorPosition(0, 0);
-            FastConsole.Init(45, 45); // One chunk = 15x15;
+            FastConsole.Init(90, 45); // One chunk = 15x15;
 
             Input.Init();
 
@@ -62,6 +61,7 @@ namespace Deep_Land
         static void Update()
         {
             PlayerData.Update();
+            UI.Update();
 
             foreach(Base cell in World.loadedCellsArray)
             {
@@ -97,6 +97,7 @@ namespace Deep_Land
             }
 
             PlayerData.Render();
+            UI.Render();
             FastConsole.Draw();
         }
     }
