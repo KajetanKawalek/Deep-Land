@@ -17,7 +17,7 @@ namespace Deep_Land
 
         List<Cell> attachedCells = new List<Cell>();
 
-        public Entity(string _name, char _display, ConsoleColor _color, Vector2 _positionInArray, bool _hasGravity, Vector2 _size, int _health = 10, int _maxHealth = 10, int _armour = 1)
+        public Entity(string _name, char _display, ConsoleColor _color, Vector2 _positionInArray, Vector2 _positionInWorld, bool _hasGravity, Vector2 _size, int _health = 10, int _maxHealth = 10, int _armour = 1)
         {
             name = _name;
             display = _display;
@@ -28,7 +28,7 @@ namespace Deep_Land
             maxHealth = _maxHealth;
             armour = _armour;
             size = _size;
-            positionInWorld = positionInArray + World.edgePoint;
+            positionInWorld = _positionInWorld;
         }
 
         public override void PreUpdate()

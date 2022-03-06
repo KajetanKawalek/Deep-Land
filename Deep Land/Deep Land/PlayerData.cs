@@ -26,6 +26,7 @@ namespace Deep_Land
         public static int xpToNextLevel { get; private set; }
 
         public static Item[] inventory { get; private set; } = new Item[30];
+        public static Item equipedItem;
 
         static int count;
         static int cursorMoveTime = 15;
@@ -34,7 +35,9 @@ namespace Deep_Land
         public static Vector2 cursorPositionInArray { get; private set; } = Vector2.Zero;
         static Vector2 cursorMovement = Vector2.Zero;
         static bool tryInteract;
+        static bool tryUse;
         static bool interact = true;
+        static bool use = true;
 
         public static void PreUpdate()
         {
@@ -47,8 +50,12 @@ namespace Deep_Land
                 cursorMovement += new Vector2(0, 1);
             if (Input.PressedKeys[Input.Keys.Right])
                 cursorMovement += new Vector2(1, 0);
+
             if (Input.PressedKeys[Input.Keys.E])
                 tryInteract = true;
+
+            if (Input.PressedKeys[Input.Keys.SpaceBar])
+                tryUse = true;
         }
 
         public static void AssignPlayer()
@@ -75,6 +82,21 @@ namespace Deep_Land
             else
             {
                 interact = true;
+            }
+
+            if (tryUse)
+            {
+                if (use)
+                {
+                    if(equipedItem != null)
+                        equipedItem.Use();
+                    use = false;
+                }
+                tryUse = false;
+            }
+            else
+            {
+                use = true;
             }
 
         }
@@ -124,6 +146,31 @@ namespace Deep_Land
         public static void Render()
         {
             FastConsole.WriteToBuffer((int)(player.positionInArray.X + cursorPosition.X), (int)(player.positionInArray.Y + cursorPosition.Y), '╳', ConsoleColor.Red);
+        }
+
+        public static void AddItemsToInventory(Item[] items)
+        {
+            foreach(Item item in items)
+            {
+                AddItemToInventory(item);
+            }
+        }
+
+        public static void AddItemToInventory(Item item)
+        {
+            int i = 0;
+            while(inventory[i] != null && i < 30)
+            {
+                i++;
+            }
+
+            if(i >= 30)
+            {
+                Debug.WriteLine("No Inventory Space");
+            }else
+            {
+                inventory[i] = item;
+            }
         }
 
         static Cell FindCellInLoadedCells<T>()

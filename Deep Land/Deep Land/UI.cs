@@ -19,6 +19,10 @@ namespace Deep_Land
         static Action[][] promptActions;
 
         static int numberPressed = -1;
+        static bool boolNumberPressed = true;
+
+        static int changePage = 0;
+        static bool boolChangePage = true;
 
         public static void PreUpdate()
         {
@@ -44,39 +48,23 @@ namespace Deep_Land
             if (Input.PressedKeys[Input.Keys.Key9])
                 numberPressed = 9;
 
+            if (Input.PressedKeys[Input.Keys.Plus])
+                changePage = 1;
 
+            if (Input.PressedKeys[Input.Keys.Minus])
+                changePage = -1;
         }
 
         public static void Update()
         {
-            if(showPrompt)
+            if (!showPrompt)
             {
-                if(numberPressed != -1)
-                {
-                    int index = numberPressed - 1;
-                    if(index == -1)
-                    {
-                        index = 10;
-                    }
-                    if (promptActions != null)
-                    {
-                        if(index >= 0 && index < promptActions.Length)
-                        {
-                            if (promptActions[index] != null)
-                            {
-                                showPrompt = false;
-                                Action[] actions = promptActions[index];
-                                foreach (Action action in actions)
-                                {
-                                    action.Act();
-                                }
-                            }
-                        }
-                    }
-                }
+                InventoryScript();
             }
-
-
+            else
+            {
+                PromptScript();
+            }
         }
 
         public static void Render()
@@ -93,6 +81,86 @@ namespace Deep_Land
             }
             Chat();
             Menu();
+        }
+
+        static void PromptScript()
+        {
+            if (numberPressed != -1)
+            {
+                if (boolNumberPressed)
+                {
+                    int index = numberPressed - 1;
+                    if (index == -1)
+                    {
+                        index = 10;
+                    }
+                    if (promptActions != null)
+                    {
+                        if (index >= 0 && index < promptActions.Length)
+                        {
+                            if (promptActions[index] != null)
+                            {
+                                showPrompt = false;
+                                Action[] actions = promptActions[index];
+                                foreach (Action action in actions)
+                                {
+                                    action.Act();
+                                }
+                            }
+                        }
+                    }
+                    boolNumberPressed = false;
+                }
+                numberPressed = -1;
+            }
+            else
+            {
+                boolNumberPressed = true;
+            }
+        }
+
+        static void InventoryScript()
+        {
+            if (changePage != 0)
+            {
+                if (boolChangePage)
+                {
+                    currentPage += changePage;
+                    if (currentPage < 1)
+                    {
+                        currentPage = 1;
+                    }
+                    if (currentPage > 3)
+                    {
+                        currentPage = 3;
+                    }
+                    boolChangePage = false;
+                }
+                changePage = 0;
+            }
+            else
+            {
+                boolChangePage = true;
+            }
+
+            if (numberPressed != -1)
+            {
+                if (boolNumberPressed)
+                {
+                    int index = numberPressed - 1;
+                    if (index == -1)
+                    {
+                        index = 10;
+                    }
+                    PlayerData.equipedItem = PlayerData.inventory[index + ((currentPage - 1) * 10)];
+                    boolNumberPressed = false;
+                }
+                numberPressed = -1;
+            }
+            else
+            {
+                boolNumberPressed = true;
+            }
         }
 
         static void Stats()
@@ -126,15 +194,31 @@ namespace Deep_Land
             {
                 string itemName = " ";
 
-                if (PlayerData.inventory[i] != null)
+                if (PlayerData.inventory[i + ((currentPage - 1) * 10)] != null)
                     itemName = PlayerData.inventory[i + ((currentPage - 1) * 10)].name;
 
                 if (i == 9)
                 {
                     DrawText(new Vector2(47, 12 + i), "0: " + itemName, ConsoleColor.White);
+
+                    if (PlayerData.inventory[i + ((currentPage - 1) * 10)] != null && PlayerData.equipedItem != null)
+                    {
+                        if (PlayerData.inventory[i + ((currentPage - 1) * 10)] == PlayerData.equipedItem)
+                        {
+                            DrawText(new Vector2(47, 12 + i), "0: " + itemName, ConsoleColor.Black, ConsoleColor.Gray);
+                        }
+                    }
                 }else
                 {
                     DrawText(new Vector2(47, 12 + i), (i + 1) + ": " + itemName, ConsoleColor.White);
+
+                    if (PlayerData.inventory[i + ((currentPage - 1) * 10)] != null && PlayerData.equipedItem != null)
+                    {
+                        if (PlayerData.inventory[i + ((currentPage - 1) * 10)] == PlayerData.equipedItem)
+                        {
+                            DrawText(new Vector2(47, 12 + i), (i + 1) + ": " + itemName, ConsoleColor.Black, ConsoleColor.Gray);
+                        }
+                    }
                 }
             }
             DrawText(new Vector2(62, 22), "Page " + currentPage + ": -/=", ConsoleColor.White);
@@ -196,7 +280,7 @@ namespace Deep_Land
             }
         }
         
-        static void DrawText(Vector2 start, string text, ConsoleColor color, bool writeFromLeft = true)
+        static void DrawText(Vector2 start, string text, ConsoleColor color, ConsoleColor bgColor = ConsoleColor.Black,bool writeFromLeft = true)
         {
             char[] characters = text.ToCharArray();
 
@@ -204,13 +288,13 @@ namespace Deep_Land
             {
                 for (int i = 0; i < characters.Length; i++)
                 {
-                    FastConsole.WriteToBuffer((int)start.X + i, (int)start.Y, characters[i], color);
+                    FastConsole.WriteToBuffer((int)start.X + i, (int)start.Y, characters[i], color, bgColor);
                 }
             }else
             {
                 for (int i = 0; i < characters.Length; i++)
                 {
-                    FastConsole.WriteToBuffer((int)start.X - i, (int)start.Y, characters[characters.Length - i - 1], color);
+                    FastConsole.WriteToBuffer((int)start.X - i, (int)start.Y, characters[characters.Length - i - 1], color, bgColor);
                 }
             }
         }

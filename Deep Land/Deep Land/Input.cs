@@ -58,8 +58,11 @@ namespace Deep_Land
             Key8 = 0x38,
             Key9 = 0x39,
 
+            Minus = 0xBD,
+            Plus = 0xBB,
+
             Esc = 0x1B,
-            End = 0x23,
+            End = 0x23
         }
     }
 }

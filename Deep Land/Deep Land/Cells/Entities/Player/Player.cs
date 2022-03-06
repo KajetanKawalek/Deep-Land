@@ -21,10 +21,9 @@ namespace Deep_Land
 
         public int jumpTime;
 
-        public Player(string _name, char _display, ConsoleColor _color, Vector2 _positionInArray, Vector2 _positionInWorld, bool _hasGravity, Vector2 _size, int _health = 10, int _maxHealth = 10, int _armour = 1) : base(_name, _display, _color, _positionInArray, _hasGravity, _size, _health, _maxHealth, _armour)
+        public Player(string _name, char _display, ConsoleColor _color, Vector2 _positionInArray, Vector2 _positionInWorld, bool _hasGravity, Vector2 _size, int _health = 10, int _maxHealth = 10, int _armour = 1) : base(_name, _display, _color, _positionInArray, _positionInWorld, _hasGravity, _size, _health, _maxHealth, _armour)
         {
-            positionInWorld = _positionInWorld;
-            lastPositionInWorld = _positionInWorld;
+            lastPositionInWorld = positionInWorld;
         }
 
         public override void PreUpdate()
@@ -36,7 +35,7 @@ namespace Deep_Land
             if (Input.PressedKeys[Input.Keys.D] && Input.PressedKeys[Input.Keys.A])
                 movementDirection = 0;
 
-            if (Input.PressedKeys[Input.Keys.SpaceBar] || Input.PressedKeys[Input.Keys.W])
+            if (Input.PressedKeys[Input.Keys.W])
                 tryJump = true;
         }
 
