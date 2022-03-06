@@ -48,6 +48,7 @@ namespace Deep_Land
         {
             Input.Update();
             PlayerData.PreUpdate();
+            UI.PreUpdate();
 
             foreach (Base cell in World.loadedCellsArray)
             {
@@ -85,7 +86,15 @@ namespace Deep_Land
 
         static void Render()
         {
-            for(int i = 0; i < 45; i++)
+            for(int i = 0; i < 90; i++)
+            {
+                for (int i2 = 0; i2 < 45; i2++)
+                {
+                    FastConsole.WriteToBuffer(i, i2, ' ', ConsoleColor.Black);
+                }
+            }
+
+            for (int i = 0; i < 45; i++)
             {
                 for (int i2 = 0; i2 < 45; i2++)
                 {

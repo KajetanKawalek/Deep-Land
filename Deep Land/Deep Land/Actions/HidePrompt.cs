@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace Deep_Land
 {
-    public class Action
+    public class HidePrompt : Action
     {
-        public virtual void Act()
+        public override void Act()
         {
-            Debug.WriteLine("Act");
+            UI.showPrompt = false;
         }
     }
 }

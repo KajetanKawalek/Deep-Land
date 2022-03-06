@@ -11,15 +11,71 @@ namespace Deep_Land
     {
         static int currentPage = 1;
 
-        static bool showPrompt = true;
+        public static bool showPrompt;
 
         static string promptText = "Hello#Second Line"; //max 41 char per line
         static string promptLabel = "-Prompt-";
         static string[] promptOptions = {"Option 1", "Option 2" };
-        static Action[,] promptActions;
+        static Action[][] promptActions;
+
+        static int numberPressed = -1;
+
+        public static void PreUpdate()
+        {
+            numberPressed = -1;
+            if (Input.PressedKeys[Input.Keys.Key0])
+                numberPressed = 0;
+            if (Input.PressedKeys[Input.Keys.Key1])
+                numberPressed = 1;
+            if (Input.PressedKeys[Input.Keys.Key2])
+                numberPressed = 2;
+            if (Input.PressedKeys[Input.Keys.Key3])
+                numberPressed = 3;
+            if (Input.PressedKeys[Input.Keys.Key4])
+                numberPressed = 4;
+            if (Input.PressedKeys[Input.Keys.Key5])
+                numberPressed = 5;
+            if (Input.PressedKeys[Input.Keys.Key6])
+                numberPressed = 6;
+            if (Input.PressedKeys[Input.Keys.Key7])
+                numberPressed = 7;
+            if (Input.PressedKeys[Input.Keys.Key8])
+                numberPressed = 8;
+            if (Input.PressedKeys[Input.Keys.Key9])
+                numberPressed = 9;
+
+
+        }
 
         public static void Update()
         {
+            if(showPrompt)
+            {
+                if(numberPressed != -1)
+                {
+                    int index = numberPressed - 1;
+                    if(index == -1)
+                    {
+                        index = 10;
+                    }
+                    if (promptActions != null)
+                    {
+                        if(index >= 0 && index < promptActions.Length)
+                        {
+                            if (promptActions[index] != null)
+                            {
+                                showPrompt = false;
+                                Action[] actions = promptActions[index];
+                                foreach (Action action in actions)
+                                {
+                                    action.Act();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
 
         }
 
@@ -53,12 +109,13 @@ namespace Deep_Land
             DrawText(new Vector2(51, 9), "Dext: " + PlayerData.dexterity, ConsoleColor.White);
         }
 
-        public static void DisplayPrompt(string text, string label, string[] options, Action[,] actions)
+        public static void DisplayPrompt(string text, string label, string[] options, Action[][] actions)
         {
             promptText = text;
             promptLabel = label;
             promptOptions = options;
             promptActions = actions;
+            showPrompt = true;
         }
 
         static void Inventory()

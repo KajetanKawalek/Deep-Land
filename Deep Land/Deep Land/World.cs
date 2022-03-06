@@ -218,7 +218,9 @@ namespace Deep_Land
                         player.ReloadJump(data[1], int.Parse(data[2]));
                     }
                     array[(int)position.X, (int)position.Y] = player;
-
+                    break;
+                case 5:
+                    array[(int)position.X, (int)position.Y] = new ItemBag("item bag", '$', ConsoleColor.Yellow, position, edgePoint + position, true, new Vector2(1, 1), 10, 10, 10);
                     break;
             }
         }
@@ -252,6 +254,9 @@ namespace Deep_Land
                         id = "4," + "t" + "," + player.jumpTime;
                     }
                     id = id + ".";
+                    break;
+                case "item bag":
+                    id = "5.";
                     break;
             }
 

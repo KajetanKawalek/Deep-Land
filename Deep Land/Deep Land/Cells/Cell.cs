@@ -19,10 +19,15 @@ namespace Deep_Land
 
         public override void Update()
         {
-
+            
         }
 
         public override void PostUpdate()
+        {
+
+        }
+
+        public virtual void OnInteract()
         {
 
         }

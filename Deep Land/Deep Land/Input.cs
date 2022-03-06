@@ -44,8 +44,22 @@ namespace Deep_Land
             Right = 0x27,
 
             SpaceBar = 0x20,
+
+            E = 0x45,
+
+            Key0 = 0x30,
+            Key1 = 0x31,
+            Key2 = 0x32,
+            Key3 = 0x33,
+            Key4 = 0x34,
+            Key5 = 0x35,
+            Key6 = 0x36,
+            Key7 = 0x37,
+            Key8 = 0x38,
+            Key9 = 0x39,
+
             Esc = 0x1B,
-            End = 0x23
+            End = 0x23,
         }
     }
 }

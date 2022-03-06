@@ -31,8 +31,10 @@ namespace Deep_Land
         static int cursorMoveTime = 15;
 
         static Vector2 cursorPosition = Vector2.Zero; //Relative to Player
-        public static Vector2 cursorPositionInArray { get; private set; } = Vector2.Zero; //Relative to Player
+        public static Vector2 cursorPositionInArray { get; private set; } = Vector2.Zero;
         static Vector2 cursorMovement = Vector2.Zero;
+        static bool tryInteract;
+        static bool interact = true;
 
         public static void PreUpdate()
         {
@@ -45,6 +47,8 @@ namespace Deep_Land
                 cursorMovement += new Vector2(0, 1);
             if (Input.PressedKeys[Input.Keys.Right])
                 cursorMovement += new Vector2(1, 0);
+            if (Input.PressedKeys[Input.Keys.E])
+                tryInteract = true;
         }
 
         public static void AssignPlayer()
@@ -55,7 +59,23 @@ namespace Deep_Land
         public static void Update()
         {
             MoveCursor();
-
+            if(tryInteract)
+            {
+                if(interact)
+                {
+                    Cell cell = World.loadedCellsArray[(int)cursorPositionInArray.X, (int)cursorPositionInArray.Y];
+                    if (cell != null)
+                    {
+                        cell.OnInteract();
+                    }
+                    interact = false;
+                }
+                tryInteract = false;
+            }
+            else
+            {
+                interact = true;
+            }
 
         }
 
