@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Numerics;
+using System.Collections.Generic;
 
 namespace Deep_Land
 {
     public static class UI
     {
         static int currentPage = 1;
+        static int promptPage = 1;
 
         public static bool showPrompt;
 
@@ -23,6 +21,8 @@ namespace Deep_Land
 
         static int changePage = 0;
         static bool boolChangePage = true;
+
+        static bool canNext;
 
         public static void PreUpdate()
         {
@@ -83,7 +83,7 @@ namespace Deep_Land
             Menu();
         }
 
-        static void PromptScript()
+        static void PromptScript() //CALCULATE HOW MUCH AND WHAT IS SHOWN HERE NOT IN RENDER
         {
             if (numberPressed != -1)
             {
@@ -96,12 +96,12 @@ namespace Deep_Land
                     }
                     if (promptActions != null)
                     {
-                        if (index >= 0 && index < promptActions.Length)
+                        if (index >= 0 && index < promptActions.Length && index < 7)
                         {
-                            if (promptActions[index] != null)
+                            if (promptActions[index + ((promptPage - 1) * 8)] != null)
                             {
                                 showPrompt = false;
-                                Action[] actions = promptActions[index];
+                                Action[] actions = promptActions[index + ((promptPage - 1) * 8)];
                                 foreach (Action action in actions)
                                 {
                                     action.Act();
@@ -109,6 +109,18 @@ namespace Deep_Land
                             }
                         }
                     }
+                    if (canNext)
+                    {
+                        if (numberPressed == 9)
+                        {
+                            promptPage++;
+                        }
+                    }
+                    if (numberPressed == 0)
+                    {
+                        showPrompt = false;
+                    }
+
                     boolNumberPressed = false;
                 }
                 numberPressed = -1;
@@ -184,6 +196,7 @@ namespace Deep_Land
             promptOptions = options;
             promptActions = actions;
             showPrompt = true;
+            promptPage = 1;
         }
 
         static void Inventory()
@@ -239,10 +252,29 @@ namespace Deep_Land
                 TextEnd++;
             }
 
-            for (int i = 0; i < promptOptions.Length; i++)
+            //int optionLine = TextEnd + 1 + promptOptions.Length;
+
+            if (TextEnd + 1 + (promptOptions.Length - ((promptPage - 1) * 8)) < 21)
             {
-                DrawText(new Vector2(47, TextEnd + i + 1), (i + 1) + ": " + promptOptions[i], ConsoleColor.White);
+                for (int i = 0; i < 8; i++)
+                {
+                    if(((promptPage - 1) * 8) >= 0 && i + ((promptPage - 1) * 8) < promptOptions.Length)
+                        DrawText(new Vector2(47, TextEnd + i + 1), (i + 1) + ": " + promptOptions[i + ((promptPage - 1) * 8)], ConsoleColor.White);
+                }
+                canNext = false;
             }
+            else
+            {
+                canNext = true;
+                for (int i = 0; i < 21 - (TextEnd + 1); i++)
+                {
+                    if (((promptPage - 1) * 8) >= 0 && i + ((promptPage - 1) * 8) < promptOptions.Length)
+                        DrawText(new Vector2(47, TextEnd + i + 1), (i + 1) + ": " + promptOptions[i + ((promptPage - 1) * 8)], ConsoleColor.White);
+                }
+                DrawText(new Vector2(47, 21), "9: NEXT", ConsoleColor.White);
+            }
+
+            DrawText(new Vector2(47, 22), "0: CANCEL", ConsoleColor.White);
         }
 
         static void Chat()

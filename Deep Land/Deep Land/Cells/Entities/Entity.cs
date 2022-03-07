@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Deep_Land
 {
-    class Entity : Cell
+    public class Entity : Cell
     {
         protected int heath;
         protected int maxHealth;

@@ -220,7 +220,7 @@ namespace Deep_Land
                     array[(int)position.X, (int)position.Y] = player;
                     break;
                 case 5:
-                    array[(int)position.X, (int)position.Y] = new ItemBag("item bag", '$', ConsoleColor.Yellow, position, edgePoint + position, true, new Vector2(1, 1), new Item[] { new Item("Pick Axe")}, 10, 10, 10);
+                    array[(int)position.X, (int)position.Y] = new ItemBag("item bag", '$', ConsoleColor.Yellow, position, edgePoint + position, true, new Vector2(1, 1), new Item[] { new Item("PickAxe"), new Item("PickAxe1") , new Item("PickAxe2") , new Item("PickAxe3") , new Item("PickAxe4") , new Item("PickAxe5") , new Item("PickAxe6") , new Item("PickAxe7") , new Item("PickAxe8"), new Item("PickAxe9") }, 10, 10, 10);
                     break;
             }
         }

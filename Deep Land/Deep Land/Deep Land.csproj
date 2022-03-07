@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="Actions\Action.cs" />
     <Compile Include="Actions\Delete.cs" />
+    <Compile Include="Actions\RemoveFromItemBag.cs" />
+    <Compile Include="Actions\DisplayPrompt.cs" />
     <Compile Include="Actions\GiveItems.cs" />
     <Compile Include="Actions\HidePrompt.cs" />
     <Compile Include="Base.cs" />
