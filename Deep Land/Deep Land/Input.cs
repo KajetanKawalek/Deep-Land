@@ -46,6 +46,7 @@ namespace Deep_Land
             SpaceBar = 0x20,
 
             E = 0x45,
+            Z = 0x5A,
 
             Key0 = 0x30,
             Key1 = 0x31,

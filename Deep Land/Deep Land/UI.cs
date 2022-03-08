@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Deep_Land
 {
@@ -15,6 +16,8 @@ namespace Deep_Land
         static string promptLabel = "-Prompt-";
         static string[] promptOptions = {"Option 1", "Option 2" };
         static Action[][] promptActions;
+        static int promptTextEnd;
+        static int maxOptionsPerPage;
 
         static int numberPressed = -1;
         static bool boolNumberPressed = true;
@@ -83,8 +86,20 @@ namespace Deep_Land
             Menu();
         }
 
-        static void PromptScript() //CALCULATE HOW MUCH AND WHAT IS SHOWN HERE NOT IN RENDER
+        static void PromptScript()
         {
+            string[] arr = promptText.Split('#');
+
+            promptTextEnd = 12;
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                promptTextEnd++;
+            }
+
+            maxOptionsPerPage = 21 - (promptTextEnd + 1);
+            Debug.WriteLine(maxOptionsPerPage);
+
             if (numberPressed != -1)
             {
                 if (boolNumberPressed)
@@ -96,16 +111,13 @@ namespace Deep_Land
                     }
                     if (promptActions != null)
                     {
-                        if (index >= 0 && index < promptActions.Length && index < 7)
+                        if(index < (promptOptions.Length) - ((promptPage - 1) * maxOptionsPerPage) && index < maxOptionsPerPage)
                         {
-                            if (promptActions[index + ((promptPage - 1) * 8)] != null)
+                            showPrompt = false;
+                            Action[] actions = promptActions[index + ((promptPage - 1) * maxOptionsPerPage)];
+                            foreach (Action action in actions)
                             {
-                                showPrompt = false;
-                                Action[] actions = promptActions[index + ((promptPage - 1) * 8)];
-                                foreach (Action action in actions)
-                                {
-                                    action.Act();
-                                }
+                                action.Act();
                             }
                         }
                     }
@@ -244,32 +256,30 @@ namespace Deep_Land
 
             string[] arr = promptText.Split('#');
 
-            int TextEnd = 12;
-
             for (int i = 0; i < arr.Length; i++)
             {
                 DrawText(new Vector2(47, 12 + i), arr[i], ConsoleColor.White);
-                TextEnd++;
             }
 
             //int optionLine = TextEnd + 1 + promptOptions.Length;
-
-            if (TextEnd + 1 + (promptOptions.Length - ((promptPage - 1) * 8)) < 21)
+            
+            if (promptOptions.Length - ((promptPage - 1) * maxOptionsPerPage) <= maxOptionsPerPage)
             {
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < maxOptionsPerPage; i++)
                 {
-                    if(((promptPage - 1) * 8) >= 0 && i + ((promptPage - 1) * 8) < promptOptions.Length)
-                        DrawText(new Vector2(47, TextEnd + i + 1), (i + 1) + ": " + promptOptions[i + ((promptPage - 1) * 8)], ConsoleColor.White);
+                    if(i + ((promptPage - 1) * maxOptionsPerPage) < promptOptions.Length)
+                        DrawText(new Vector2(47, promptTextEnd + i + 1), (i + 1) + ": " + promptOptions[i + ((promptPage - 1) * maxOptionsPerPage)], ConsoleColor.White);
                 }
                 canNext = false;
             }
             else
             {
                 canNext = true;
-                for (int i = 0; i < 21 - (TextEnd + 1); i++)
+                for (int i = 0; i < maxOptionsPerPage; i++)
                 {
-                    if (((promptPage - 1) * 8) >= 0 && i + ((promptPage - 1) * 8) < promptOptions.Length)
-                        DrawText(new Vector2(47, TextEnd + i + 1), (i + 1) + ": " + promptOptions[i + ((promptPage - 1) * 8)], ConsoleColor.White);
+                    Debug.WriteLine("index" + i);
+                    if (i + ((promptPage - 1) * maxOptionsPerPage) < promptOptions.Length)
+                        DrawText(new Vector2(47, promptTextEnd + i + 1), (i + 1) + ": " + promptOptions[i + ((promptPage - 1) * maxOptionsPerPage)], ConsoleColor.White);
                 }
                 DrawText(new Vector2(47, 21), "9: NEXT", ConsoleColor.White);
             }

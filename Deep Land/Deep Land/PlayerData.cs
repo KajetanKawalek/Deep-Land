@@ -36,8 +36,10 @@ namespace Deep_Land
         static Vector2 cursorMovement = Vector2.Zero;
         static bool tryInteract;
         static bool tryUse;
+        static bool tryShowItemInfo;
         static bool interact = true;
         static bool use = true;
+        static bool showItemInfo;
 
         public static void PreUpdate()
         {
@@ -56,6 +58,9 @@ namespace Deep_Land
 
             if (Input.PressedKeys[Input.Keys.SpaceBar])
                 tryUse = true;
+
+            if (Input.PressedKeys[Input.Keys.Z])
+                tryShowItemInfo = true;
         }
 
         public static void AssignPlayer()
@@ -99,6 +104,20 @@ namespace Deep_Land
                 use = true;
             }
 
+            if (tryShowItemInfo)
+            {
+                if (showItemInfo)
+                {
+                    if (equipedItem != null)
+                        equipedItem.ShowInfo();
+                    showItemInfo = false;
+                }
+                tryShowItemInfo = false;
+            }
+            else
+            {
+                showItemInfo = true;
+            }
         }
 
         static void MoveCursor()

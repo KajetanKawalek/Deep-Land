@@ -20,5 +20,13 @@ namespace Deep_Land
         {
             Debug.WriteLine("Use " + name);
         }
+
+        public virtual void ShowInfo()
+        {
+            Action[][] actions = new Action[1][];
+            actions[0] = new Action[] { new Action() };
+
+            UI.DisplayPrompt(name, "-" + name + "-", new string[] { "Drop" }, actions);
+        }
     }
 }

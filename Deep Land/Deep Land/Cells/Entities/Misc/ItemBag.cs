@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Deep_Land
 {
@@ -36,7 +37,16 @@ namespace Deep_Land
             }
             actions[1] = new Action[] { new DisplayPrompt("Select Item: ", "-Item Bag-", itemNames, actions2) };
 
-            UI.DisplayPrompt("Loot: ", "-Item Bag-", new string[] { "Take All Items", "Take One Item"}, actions);
+            string displayItemNames = items[0].name;
+
+            for(int i = 1; i < items.Count; i++)
+            {
+                displayItemNames = displayItemNames + ", " + items[i].name;
+            }
+
+            Regex.Replace(displayItemNames, ".{41}", "$0#");
+
+            UI.DisplayPrompt("Loot: " + displayItemNames, "-Item Bag-", new string[] { "Take All Items", "Take One Item"}, actions);
         }
 
         public override void PreUpdate()
