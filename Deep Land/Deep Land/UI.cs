@@ -2,6 +2,8 @@
 using System.Numerics;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
+using System.Linq;
 
 namespace Deep_Land
 {
@@ -12,12 +14,18 @@ namespace Deep_Land
 
         public static bool showPrompt;
 
-        static string promptText = "Hello#Second Line"; //max 41 char per line
+        static string promptText = "Hello";
+        static string[] promptDisplayText;
         static string promptLabel = "-Prompt-";
         static string[] promptOptions = {"Option 1", "Option 2" };
+        static string[] promptDisplayOptions;
+        static int promptOptionsStartPage;
+        static int promptOptionsDisplayed;
         static Action[][] promptActions;
         static int promptTextEnd;
         static int maxOptionsPerPage;
+
+        static bool promptDisplayOptionsBool;
 
         static int numberPressed = -1;
         static bool boolNumberPressed = true;
@@ -25,7 +33,7 @@ namespace Deep_Land
         static int changePage = 0;
         static bool boolChangePage = true;
 
-        static bool canNext;
+        static bool hasNextPage;
 
         public static void PreUpdate()
         {
@@ -88,7 +96,71 @@ namespace Deep_Land
 
         static void PromptScript()
         {
-            string[] arr = promptText.Split('#');
+            promptDisplayText = WrapText("The Lord of the Rings is an epic[1] high-fantasy novel[a] by English author and scholar J. R. R. Tolkien. Set in Middle-earth, intended to be Earth at some distant time in the past, the story began as a sequel to Tolkien's 1937 children's book The Hobbit, but eventually developed into a much larger work. Written in stages between 1937 and 1949, The Lord of the Rings is one of the best-selling books ever written, with over 150 million copies sold.[2] The title refers to the story's main antagonist, the Dark Lord Sauron, who in an earlier age created the One Ring to rule the other Rings of Power given to Men, Dwarves, and Elves, in his campaign to conquer all of Middle-earth. From homely beginnings in the Shire, a hobbit land reminiscent of the English countryside, the story ranges across Middle-earth, following the quest to destroy the One Ring mainly through the asdas asdasdasda aasdas asdasda asdasdasd asdasdasd asdasdasd asdasdasdas asdasdasda asdasdasd asdasdasd asdasdasd", 41).Skip(((promptPage - 1) * 9)).ToArray();
+
+            promptTextEnd = promptDisplayText.Length + 46;
+
+            if (promptDisplayText.Length > 9)
+            {
+                hasNextPage = true;
+            }
+            else
+            {
+                promptOptionsStartPage = promptPage;
+                hasNextPage = false;
+            }
+
+            if (promptDisplayText.Length <= 9)
+            {
+                promptDisplayOptions = promptOptions.Skip(promptOptionsDisplayed).ToArray();
+                Debug.WriteLine(promptOptionsDisplayed);
+
+                promptDisplayOptionsBool = true;
+
+                if (promptDisplayText.Length + 1 + promptDisplayOptions.Length > 9)
+                {
+                    hasNextPage = true;
+                }
+                else
+                {
+                    hasNextPage = false;
+                }
+            }else
+            {
+                promptDisplayOptionsBool = false;
+            }
+
+            if (numberPressed != -1)
+            {
+                if (boolNumberPressed)
+                {
+
+                    
+
+                    if (hasNextPage)
+                    {
+                        if (numberPressed == 9)
+                        {
+                            promptPage++;
+                            if(promptDisplayOptionsBool)
+                                promptOptionsDisplayed += 9 - promptDisplayText.Length - 1;
+                        }
+                    }
+                    if (numberPressed == 0)
+                    {
+                        showPrompt = false;
+                    }
+
+                    boolNumberPressed = false;
+                }
+                numberPressed = -1;
+            }
+            else
+            {
+                boolNumberPressed = true;
+            }
+
+            /*string[] arr = promptText.Split('#');
 
             promptTextEnd = 12;
 
@@ -140,7 +212,7 @@ namespace Deep_Land
             else
             {
                 boolNumberPressed = true;
-            }
+            }*/
         }
 
         static void InventoryScript()
@@ -209,6 +281,7 @@ namespace Deep_Land
             promptActions = actions;
             showPrompt = true;
             promptPage = 1;
+            promptOptionsDisplayed = 0;
         }
 
         static void Inventory()
@@ -254,7 +327,31 @@ namespace Deep_Land
             DrawBorder(new Vector2(46, 11), new Vector2(43, 13), ConsoleColor.DarkGray);
             DrawText(new Vector2(67 - (promptLabel.Length/2), 11), promptLabel, ConsoleColor.DarkGray);
 
-            string[] arr = promptText.Split('#');
+            for (int i = 0; i < promptDisplayText.Length; i++)
+            {
+                if(i < 9)
+                    DrawText(new Vector2(47, 12 + i), promptDisplayText[i], ConsoleColor.White);
+            }
+
+            if (promptDisplayOptionsBool)
+            {
+                //Debug.WriteLine("Render");
+                //Debug.WriteLine(promptDisplayOptions.Length);
+                for (int i = 0; i < promptDisplayOptions.Length; i++)
+                {
+                    if (i + promptDisplayText.Length + 1 < 9)
+                        DrawText(new Vector2(47, 12 + i + promptDisplayText.Length + 1), (i + 1) + ": " + promptDisplayOptions[i], ConsoleColor.White);
+                    //Debug.WriteLine("display");
+                }
+            }
+
+            if (hasNextPage)
+            {
+                DrawText(new Vector2(47, 21), "9: NEXT", ConsoleColor.White);
+            }
+            DrawText(new Vector2(47, 22), "0: CANCEL", ConsoleColor.White);
+
+            /*string[] arr = promptText.Split('#');
 
             for (int i = 0; i < arr.Length; i++)
             {
@@ -284,7 +381,7 @@ namespace Deep_Land
                 DrawText(new Vector2(47, 21), "9: NEXT", ConsoleColor.White);
             }
 
-            DrawText(new Vector2(47, 22), "0: CANCEL", ConsoleColor.White);
+            DrawText(new Vector2(47, 22), "0: CANCEL", ConsoleColor.White);*/
         }
 
         static void Chat()
@@ -339,6 +436,37 @@ namespace Deep_Land
                     FastConsole.WriteToBuffer((int)start.X - i, (int)start.Y, characters[characters.Length - i - 1], color, bgColor);
                 }
             }
+        }
+
+        static List<string> WrapText(string text, int pixels)
+        {
+            string[] originalLines = text.Split(new string[] { " " },
+                StringSplitOptions.None);
+
+            List<string> wrappedLines = new List<string>();
+
+            StringBuilder actualLine = new StringBuilder();
+            int actualWidth = 0;
+
+            foreach (var item in originalLines)
+            {
+                actualLine.Append(item + " ");
+                actualWidth += item.Length + 1;
+
+                if (actualWidth > pixels)
+                {
+                    actualLine.Remove(actualLine.Length - (item.Length + 1), item.Length + 1);
+                    wrappedLines.Add(actualLine.ToString());
+                    actualLine.Clear();
+                    actualLine.Append(item + " ");
+                    actualWidth = item.Length + 1;
+                }
+            }
+
+            if (actualLine.Length > 0)
+                wrappedLines.Add(actualLine.ToString());
+
+            return wrappedLines;
         }
     }
 }
