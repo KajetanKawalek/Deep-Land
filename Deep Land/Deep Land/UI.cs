@@ -20,7 +20,7 @@ namespace Deep_Land
         static string[] promptOptions = {"Option 1", "Option 2" };
         static string[] promptDisplayOptions;
         static int promptOptionsStartPage;
-        static int promptOptionsDisplayed;
+        static int promptOptionsDisplayed = 0;
         static Action[][] promptActions;
         static int promptTextEnd;
         static int maxOptionsPerPage;
@@ -96,9 +96,7 @@ namespace Deep_Land
 
         static void PromptScript()
         {
-            promptDisplayText = WrapText("The Lord of the Rings is an epic[1] high-fantasy novel[a] by English author and scholar J. R. R. Tolkien. Set in Middle-earth, intended to be Earth at some distant time in the past, the story began as a sequel to Tolkien's 1937 children's book The Hobbit, but eventually developed into a much larger work. Written in stages between 1937 and 1949, The Lord of the Rings is one of the best-selling books ever written, with over 150 million copies sold.[2] The title refers to the story's main antagonist, the Dark Lord Sauron, who in an earlier age created the One Ring to rule the other Rings of Power given to Men, Dwarves, and Elves, in his campaign to conquer all of Middle-earth. From homely beginnings in the Shire, a hobbit land reminiscent of the English countryside, the story ranges across Middle-earth, following the quest to destroy the One Ring mainly through the asdas asdasdasda aasdas asdasda asdasdasd asdasdasd asdasdasd asdasdasdas asdasdasda asdasdasd asdasdasd asdasdasd", 41).Skip(((promptPage - 1) * 9)).ToArray();
-
-            promptTextEnd = promptDisplayText.Length + 46;
+            promptDisplayText = WrapText(promptText, 41).Skip(((promptPage - 1) * 9)).ToArray();
 
             if (promptDisplayText.Length > 9)
             {
@@ -113,7 +111,6 @@ namespace Deep_Land
             if (promptDisplayText.Length <= 9)
             {
                 promptDisplayOptions = promptOptions.Skip(promptOptionsDisplayed).ToArray();
-                Debug.WriteLine(promptOptionsDisplayed);
 
                 promptDisplayOptionsBool = true;
 
@@ -134,8 +131,23 @@ namespace Deep_Land
             {
                 if (boolNumberPressed)
                 {
+                    if (promptDisplayOptionsBool && numberPressed != 9 && numberPressed != 0)
+                    {
+                        int index = numberPressed - 1 + promptOptionsDisplayed;
+                        Debug.WriteLine(index);
+                        Debug.WriteLine(promptOptions.Length - 1);
 
-                    
+                        if (index >= 0 && index <= promptOptions.Length - 1)
+                        {
+                            showPrompt = false;
+                            Action[] actions = promptActions[index];
+                            foreach (Action action in actions)
+                            {
+                                action.Act();
+                            }
+                        }
+                    }
+
 
                     if (hasNextPage)
                     {
@@ -143,7 +155,10 @@ namespace Deep_Land
                         {
                             promptPage++;
                             if(promptDisplayOptionsBool)
-                                promptOptionsDisplayed += 9 - promptDisplayText.Length - 1;
+                            {
+                                promptOptionsDisplayed += 9 - (promptDisplayText.Length);
+                            }
+
                         }
                     }
                     if (numberPressed == 0)
@@ -339,8 +354,8 @@ namespace Deep_Land
                 //Debug.WriteLine(promptDisplayOptions.Length);
                 for (int i = 0; i < promptDisplayOptions.Length; i++)
                 {
-                    if (i + promptDisplayText.Length + 1 < 9)
-                        DrawText(new Vector2(47, 12 + i + promptDisplayText.Length + 1), (i + 1) + ": " + promptDisplayOptions[i], ConsoleColor.White);
+                    if (i + promptDisplayText.Length < 9)
+                        DrawText(new Vector2(47, 12 + i + promptDisplayText.Length), (i + 1) + ": " + promptDisplayOptions[i], ConsoleColor.White);
                     //Debug.WriteLine("display");
                 }
             }
@@ -450,15 +465,20 @@ namespace Deep_Land
 
             foreach (var item in originalLines)
             {
-                actualLine.Append(item + " ");
+                if(item != "\n")
+                {
+                    actualLine.Append(item + " ");
+                }
                 actualWidth += item.Length + 1;
 
-                if (actualWidth > pixels)
+                if (actualWidth > pixels || item == "\n")
                 {
-                    actualLine.Remove(actualLine.Length - (item.Length + 1), item.Length + 1);
+                    if (item != "\n")
+                        actualLine.Remove(actualLine.Length - (item.Length + 1), item.Length + 1);
                     wrappedLines.Add(actualLine.ToString());
                     actualLine.Clear();
-                    actualLine.Append(item + " ");
+                    if (item != "\n")
+                        actualLine.Append(item + " ");
                     actualWidth = item.Length + 1;
                 }
             }

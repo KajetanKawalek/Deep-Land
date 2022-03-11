@@ -60,6 +60,7 @@
     <Compile Include="Cells\Entities\Entity.cs" />
     <Compile Include="Cells\Entities\Misc\ItemBag.cs" />
     <Compile Include="Cells\Entities\Player\Player.cs" />
+    <Compile Include="WorldGeneration.cs" />
     <Compile Include="FastConsole.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Items\Item.cs" />

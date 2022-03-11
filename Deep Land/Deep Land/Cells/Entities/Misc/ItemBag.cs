@@ -44,9 +44,7 @@ namespace Deep_Land
                 displayItemNames = displayItemNames + ", " + items[i].name;
             }
 
-            Regex.Replace(displayItemNames, ".{41}", "$0#");
-
-            UI.DisplayPrompt("Loot: " + displayItemNames, "-Item Bag-", new string[] { "Take All Items", "Take One Item", "1", "2", "3", "4", "5", "6", "7", "8"}, actions);
+            UI.DisplayPrompt("Loot: " + displayItemNames + " \n \n", "-Item Bag-", new string[] { "Take All Items", "Take One Item"}, actions);
         }
 
         public override void PreUpdate()

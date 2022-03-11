@@ -37,8 +37,11 @@ namespace Deep_Land
 
             Input.Init();
 
+            WorldGeneration.GenerateWorld(new Vector2(15, 15));
+
             World.Init(new Vector2(45, 45));
             World.LoadCells(new Vector2(16, 16));
+            //World.LoadCells(new Vector2(WorldGeneration.PlayerStartPos.X - 15, WorldGeneration.PlayerStartPos.Y - 15));
 
             PlayerData.AssignPlayer();
             //World.InstanciateAtPositionInArray(4, new Vector2(16, 16));

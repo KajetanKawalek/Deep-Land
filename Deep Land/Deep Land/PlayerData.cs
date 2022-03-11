@@ -159,12 +159,14 @@ namespace Deep_Land
                 cursorMoveTime = 5;
             }
 
-            cursorPositionInArray = player.positionInArray + cursorPosition;
+            if(player != null)
+                cursorPositionInArray = player.positionInArray + cursorPosition;
         }
 
         public static void Render()
         {
-            FastConsole.WriteToBuffer((int)(player.positionInArray.X + cursorPosition.X), (int)(player.positionInArray.Y + cursorPosition.Y), '╳', ConsoleColor.Red);
+            if(player != null)
+                FastConsole.WriteToBuffer((int)(player.positionInArray.X + cursorPosition.X), (int)(player.positionInArray.Y + cursorPosition.Y), '╳', ConsoleColor.Red);
         }
 
         public static void AddItemsToInventory(Item[] items)

@@ -52,8 +52,8 @@ namespace Deep_Land
             CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 1), '⎞', ConsoleColor.DarkGreen);
             CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 2), '·', ConsoleColor.White);
             CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 2), '·', ConsoleColor.White);
-            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 3), '╱', ConsoleColor.Yellow);
-            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 3), '╲', ConsoleColor.Yellow);
+            CreateAttachedCell(new Vector2(positionInArray.X, positionInArray.Y - 3), '╱', ConsoleColor.DarkRed);
+            CreateAttachedCell(new Vector2(positionInArray.X + 1, positionInArray.Y - 3), '╲', ConsoleColor.DarkRed);
 
             //Check for floor
             onGround = !BottomCollide().OfType<Cell>().All(n => n == null || n is Fluid);

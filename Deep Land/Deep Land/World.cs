@@ -203,10 +203,10 @@ namespace Deep_Land
                     array[(int)position.X, (int)position.Y] = null;
                     break;
                 case 1:
-                    array[(int)position.X, (int)position.Y] = new Block("stone", '█', ConsoleColor.White, position);
+                    array[(int)position.X, (int)position.Y] = new Block("stone", '█', ConsoleColor.DarkGray, position);
                     break;
                 case 2:
-                    array[(int)position.X, (int)position.Y] = new Powder("gravel", '▒', ConsoleColor.Gray, position, 10);
+                    array[(int)position.X, (int)position.Y] = new Powder("gravel", '▒', ConsoleColor.White, position, 10);
                     break;
                 case 3:
                     array[(int)position.X, (int)position.Y] = new Fluid("water", '≈', ConsoleColor.Cyan, position, 5);
