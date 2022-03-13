@@ -13,7 +13,7 @@ namespace Deep_Land
 
         int moveTime;
 
-        Random rng = new Random();
+        Random rng = new Random(Guid.NewGuid().GetHashCode());
 
         public Powder(string _name, char _display, ConsoleColor _color, Vector2 _positionInArray, int _moveTime)
         {

@@ -22,7 +22,7 @@ namespace Deep_Land
         public static void LoadCells(Vector2 pointOfInterestPosition)
         {
             middlePoint = pointOfInterestPosition;
-            edgePoint = new Vector2((((float)Math.Ceiling((middlePoint.X + 1) / 15) - 1) * 15) - 15, (((float)Math.Ceiling((middlePoint.Y + 1) / 15) - 1) * 15) -15);
+            edgePoint = new Vector2((((float)Math.Ceiling((middlePoint.X + 1) / 15) - 1) * 15) - 15, (((float)Math.Ceiling((middlePoint.Y + 1) / 15) - 1) * 15) - 15);
             Chunk[,] chunks = PickChunks(pointOfInterestPosition);
 
             loadedCellsArray = chunksToCellArray(chunks);
@@ -206,7 +206,7 @@ namespace Deep_Land
                     array[(int)position.X, (int)position.Y] = new Block("stone", '█', ConsoleColor.DarkGray, position);
                     break;
                 case 2:
-                    array[(int)position.X, (int)position.Y] = new Powder("gravel", '▒', ConsoleColor.White, position, 10);
+                    array[(int)position.X, (int)position.Y] = new Powder("cobbleStone", '▒', ConsoleColor.DarkGray, position, 10);
                     break;
                 case 3:
                     array[(int)position.X, (int)position.Y] = new Fluid("water", '≈', ConsoleColor.Cyan, position, 5);
@@ -238,7 +238,7 @@ namespace Deep_Land
                 case "stone":
                     id = "1.";
                     break;
-                case "gravel":
+                case "cobbleStone":
                     id = "2.";
                     break;
                 case "water":

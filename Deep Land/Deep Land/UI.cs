@@ -92,6 +92,8 @@ namespace Deep_Land
             }
             Chat();
             Menu();
+            if(PlayerData.player != null)
+                DrawText(new Vector2(46, 44), "Position: " + PlayerData.player.positionInWorld.X.ToString() + ", " + PlayerData.player.positionInWorld.Y.ToString(), ConsoleColor.DarkGray);
         }
 
         static void PromptScript()

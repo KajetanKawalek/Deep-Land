@@ -60,6 +60,7 @@
     <Compile Include="Cells\Entities\Entity.cs" />
     <Compile Include="Cells\Entities\Misc\ItemBag.cs" />
     <Compile Include="Cells\Entities\Player\Player.cs" />
+    <Compile Include="Items\Tools\PickAxe.cs" />
     <Compile Include="WorldGeneration.cs" />
     <Compile Include="FastConsole.cs" />
     <Compile Include="Input.cs" />
@@ -73,8 +74,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Items\Tools\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

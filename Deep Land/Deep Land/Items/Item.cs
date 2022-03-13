@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace Deep_Land
 {
-    public class Item
+    public class Item : Base
     {
         public string name;
 
@@ -27,6 +27,21 @@ namespace Deep_Land
             actions[0] = new Action[] { new Action() };
 
             UI.DisplayPrompt(name, "-" + name + "-", new string[] { "Drop" }, actions);
+        }
+
+        public override void PreUpdate()
+        {
+
+        }
+
+        public override void Update()
+        {
+
+        }
+
+        public override void PostUpdate()
+        {
+
         }
     }
 }

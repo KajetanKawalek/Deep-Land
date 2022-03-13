@@ -29,7 +29,7 @@ namespace Deep_Land
                 }
             }
 
-            for(int i = 0; i < (size.X * size.Y) / 9; i++)
+            for(int i = 0; i < (size.X * size.Y) / 25; i++)
             {
                 GenerateCave();
             }
@@ -44,7 +44,7 @@ namespace Deep_Land
 
             GenerateBorder();
 
-            //CreatePlayerAtRandomPoint();
+            CreatePlayerAtRandomPoint();
 
             WriteToChunks();
         }
@@ -86,7 +86,7 @@ namespace Deep_Land
                 point.X += rand.Next(1, 4) - 2;
                 point.Y += rand.Next(1, 4) - 2;
 
-                int size = 4;
+                int size = rand.Next(1, 2);
 
                 for (int i2 = 0; i2 < size; i2++)
                 {
@@ -112,7 +112,7 @@ namespace Deep_Land
                 point.X += rand.Next(1, 4) - 2;
                 point.Y += rand.Next(1, 4) - 2;
 
-                int size = 4;
+                int size = rand.Next(1, 4);
 
                 for (int i2 = 0; i2 < size; i2++)
                 {
@@ -147,6 +147,7 @@ namespace Deep_Land
             Vector2 point = new Vector2(rand.Next(0, world.GetLength(0) - 3), rand.Next(4, world.GetLength(1) - 1));
             while(!CheckEmpty(point, new Vector2(2, 4)))
             {
+                Debug.WriteLine("re roll");
                 point = new Vector2(rand.Next(0, world.GetLength(0) - 3), rand.Next(4, world.GetLength(1) - 1));
             }
 
@@ -180,26 +181,23 @@ namespace Deep_Land
             }
         }
 
-        static bool CheckEmpty(Vector2 point, Vector2 size)
+        static bool CheckEmpty(Vector2 point, Vector2 size) //This sometimes doesnt work
         {
-            int numberOfEmpty = 0;
-
             for (int i = 0; i < size.X; i++)
             {
                 for (int i2 = 0; i2 > -size.Y; i2--)
                 {
-                    if(world[(int)point.X + i, (int)point.Y + i2] == "0.")
+                    if(world[(int)point.X + i, (int)point.Y + i2] != "0.")
                     {
-                        numberOfEmpty++;
+                        Debug.WriteLine("no room");
+                        return false;
                     }
+                    Debug.WriteLine(world[(int)point.X + i, (int)point.Y + i2]);
                 }
             }
 
-            if(numberOfEmpty == size.X * size.Y)
-            {
-                return true;
-            }
-            return false;
+            Debug.WriteLine("is room");
+            return true;
         }
     }
 }

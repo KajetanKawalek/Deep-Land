@@ -13,7 +13,7 @@ namespace Deep_Land
         protected int armour = 1;
         protected bool hasGravity;
         protected Vector2 size;
-        protected Vector2 positionInWorld;
+        public Vector2 positionInWorld;
 
         List<Cell> attachedCells = new List<Cell>();
 

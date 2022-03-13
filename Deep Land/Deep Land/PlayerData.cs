@@ -10,7 +10,7 @@ namespace Deep_Land
 {
     static class PlayerData
     {
-        static Player player;
+        public static Player player;
 
         public static int health { get; private set; } = 1000;
         public static int maxHealth { get; private set; } = 1000;
@@ -156,7 +156,7 @@ namespace Deep_Land
             else
             {
                 count = 0;
-                cursorMoveTime = 5;
+                cursorMoveTime = 30;
             }
 
             if(player != null)
