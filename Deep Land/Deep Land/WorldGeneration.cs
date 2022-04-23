@@ -157,14 +157,14 @@ namespace Deep_Land
 
         static void WriteToChunks()
         {
-            string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
+            string RunningPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
             for (int i = 0; i < world.GetLength(0) / 15; i++)
             {
                 for (int i2 = 0; i2 < world.GetLength(1) / 15; i2++)
                 {
                     string[] full = new string[15];
-                    string FileName = string.Format("{0}worlds\\test world\\chunk" + i + "-" + i2 + ".txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
+                    string FileName = string.Format("{0}Debug\\World\\chunk" + i + "-" + i2 + ".txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
 
                     for (int i3 = 0; i3 < 15; i3++)
                     {

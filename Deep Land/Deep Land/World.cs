@@ -34,15 +34,15 @@ namespace Deep_Land
 
             WriteChunks(chunks, new Vector2((float)Math.Ceiling((middlePoint.Y + 1) / 15), (float)Math.Ceiling((middlePoint.X + 1) / 15)));
 
-            string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
-            string FileName = string.Format("{0}worlds\\test world\\data.txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
+            string RunningPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string FileName = string.Format("{0}Debug\\World\\data.txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
             File.WriteAllLines(FileName, new string[] { PlayerData.player.positionInWorld.ToString() } );
         }
 
         static Chunk[,] PickChunks(Vector2 pointOfInterestPosition)
         {
             Vector2 middleChunk = new Vector2((float)Math.Ceiling((pointOfInterestPosition.Y + 1) / 15), (float)Math.Ceiling((pointOfInterestPosition.X + 1) / 15));
-            string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
+            string RunningPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             Chunk[,] chunks = new Chunk[3, 3];
 
             //string FileName = string.Format("{0}worlds\\test world\\chunk" + middleChunk.X + "-" + middleChunk.Y + ".txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
@@ -51,7 +51,7 @@ namespace Deep_Land
             {
                 for (int i2 = 0; i2 < 3; i2++)
                 {
-                    string FileName = string.Format("{0}worlds\\test world\\chunk" + (middleChunk.X + i2 - 1) + "-" + (middleChunk.Y + i - 1) + ".txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
+                    string FileName = string.Format("{0}Debug\\World\\chunk" + (middleChunk.X + i2 - 1) + "-" + (middleChunk.Y + i - 1) + ".txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
                     if(File.Exists(FileName))
                     {
                         string[] file = File.ReadAllLines(FileName);
@@ -86,14 +86,14 @@ namespace Deep_Land
 
         static void WriteChunks(Chunk[,] chunks, Vector2 middleChunkPosition)
         {
-            string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
+            string RunningPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
             for (int i = 0; i < 3; i++)
             {
                 for (int i2 = 0; i2 < 3; i2++)
                 {
                     string[] full = new string[15];
-                    string FileName = string.Format("{0}worlds\\test world\\chunk" + (middleChunkPosition.X + i2 - 1) + "-" + (middleChunkPosition.Y + i - 1) + ".txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
+                    string FileName = string.Format("{0}Debug\\World\\chunk" + (middleChunkPosition.X + i2 - 1) + "-" + (middleChunkPosition.Y + i - 1) + ".txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
                     Chunk ch = chunks[i, i2];
                     if (File.Exists(FileName))
                     {
@@ -184,10 +184,10 @@ namespace Deep_Land
 
         public static void DebugChunk()
         {
-            string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
+            string RunningPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
             Console.WriteLine(RunningPath);
             Console.ReadKey();
-            string FileName = string.Format("{0}worlds\\test world\\chunk0-0.txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
+            string FileName = string.Format("{0}Debug\\World\\chunk0-0.txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
             Console.WriteLine(FileName);
             Console.ReadKey();
 

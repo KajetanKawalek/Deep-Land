@@ -48,8 +48,8 @@ namespace Deep_Land
             }
             else
             {
-                string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
-                string FileName = string.Format("{0}worlds\\test world\\data.txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
+                string RunningPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                string FileName = string.Format("{0}Debug\\World\\data.txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
                 if (File.Exists(FileName))
                 {
                     string[] file = File.ReadAllLines(FileName);
