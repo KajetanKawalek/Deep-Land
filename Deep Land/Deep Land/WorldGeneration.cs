@@ -131,14 +131,14 @@ namespace Deep_Land
         {
             for (int i = 0; i < world.GetLength(0); i++)
             {
-                world[i, 0] = "1.";
-                world[i, world.GetLength(0) - 1] = "1.";
+                world[i, 0] = "6.";
+                world[i, world.GetLength(0) - 1] = "6.";
             }
 
             for (int i = 0; i < world.GetLength(1); i++)
             {
-                world[0, i] = "1.";
-                world[world.GetLength(1) - 1, i] = "1.";
+                world[0, i] = "6.";
+                world[world.GetLength(1) - 1, i] = "6.";
             }
         }
 
@@ -187,7 +187,7 @@ namespace Deep_Land
             {
                 for (int i2 = 0; i2 > -size.Y; i2--)
                 {
-                    if(world[(int)point.X + i, (int)point.Y + i2] != "0.")
+                    if(world[(int)point.X + i2, (int)point.Y + i] != "0.")
                     {
                         Debug.WriteLine("no room");
                         return false;

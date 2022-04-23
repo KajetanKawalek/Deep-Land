@@ -62,6 +62,9 @@ namespace Deep_Land
             Minus = 0xBD,
             Plus = 0xBB,
 
+            I = 0x49,
+            O = 0x4F,
+
             Esc = 0x1B,
             End = 0x23
         }

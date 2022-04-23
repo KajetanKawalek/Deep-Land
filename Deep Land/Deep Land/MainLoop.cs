@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Numerics;
+using System.IO;
 
 namespace Deep_Land
 {
@@ -29,7 +30,7 @@ namespace Deep_Land
             }
         }
 
-        static void Start()
+        public static void Start()
         {
             Console.CursorVisible = false;
             Console.SetCursorPosition(0, 0);
@@ -37,16 +38,39 @@ namespace Deep_Land
 
             Input.Init();
 
-            WorldGeneration.GenerateWorld(new Vector2(15, 15)); //333 x 333 will be final
+            MainMenu.Init();
 
             World.Init(new Vector2(45, 45));
             //World.LoadCells(new Vector2(16, 16));
-            World.LoadCells(new Vector2(WorldGeneration.PlayerStartPos.X - 15, WorldGeneration.PlayerStartPos.Y - 15));
+            if(MainMenu.newGen)
+            {
+                World.LoadCells(new Vector2(WorldGeneration.PlayerStartPos.X - 15, WorldGeneration.PlayerStartPos.Y - 15));
+            }
+            else
+            {
+                string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
+                string FileName = string.Format("{0}worlds\\test world\\data.txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
+                if (File.Exists(FileName))
+                {
+                    string[] file = File.ReadAllLines(FileName);
+                    string[] temp = file[0].Split(',');
+                    int x = 0;
+                    int.TryParse(temp[0].Remove(0, 1), out x);
+                    int y = 0;
+                    int.TryParse(temp[1].Remove(temp[1].Length - 1, 1), out y);
+
+                    Debug.WriteLine(x);
+                    Debug.WriteLine(y);
+                    World.LoadCells(new Vector2(x, y));
+                }
+            }
 
             PlayerData.AssignPlayer();
 
-            PlayerData.AddItemToInventory(new PickAxe("Ol' Reliable", 30, 10));
-            //World.InstanciateAtPositionInArray(4, new Vector2(16, 16));
+            PlayerData.AddItemToInventory(new PickAxe("PickAxe", 30, 10));
+            PlayerData.AddItemToInventory(new Placeable("Stone", 30, 1));
+            PlayerData.AddItemToInventory(new Placeable("Gravel", 30, 2));
+            PlayerData.AddItemToInventory(new Placeable("Water", 30, 3));
         }
 
         static void PreUpdate()

@@ -35,6 +35,8 @@ namespace Deep_Land
 
         static bool hasNextPage;
 
+        static bool saveAndQuit;
+
         public static void PreUpdate()
         {
             numberPressed = -1;
@@ -64,6 +66,9 @@ namespace Deep_Land
 
             if (Input.PressedKeys[Input.Keys.Minus])
                 changePage = -1;
+
+            if (Input.PressedKeys[Input.Keys.I])
+                saveAndQuit = true;
         }
 
         public static void Update()
@@ -75,6 +80,14 @@ namespace Deep_Land
             else
             {
                 PromptScript();
+            }
+
+
+            if (saveAndQuit)
+            {
+                World.SaveLoadedCells();
+
+                Environment.Exit(0);
             }
         }
 
@@ -176,60 +189,6 @@ namespace Deep_Land
             {
                 boolNumberPressed = true;
             }
-
-            /*string[] arr = promptText.Split('#');
-
-            promptTextEnd = 12;
-
-            for (int i = 0; i < arr.Length; i++)
-            {
-                promptTextEnd++;
-            }
-
-            maxOptionsPerPage = 21 - (promptTextEnd + 1);
-            Debug.WriteLine(maxOptionsPerPage);
-
-            if (numberPressed != -1)
-            {
-                if (boolNumberPressed)
-                {
-                    int index = numberPressed - 1;
-                    if (index == -1)
-                    {
-                        index = 10;
-                    }
-                    if (promptActions != null)
-                    {
-                        if(index < (promptOptions.Length) - ((promptPage - 1) * maxOptionsPerPage) && index < maxOptionsPerPage)
-                        {
-                            showPrompt = false;
-                            Action[] actions = promptActions[index + ((promptPage - 1) * maxOptionsPerPage)];
-                            foreach (Action action in actions)
-                            {
-                                action.Act();
-                            }
-                        }
-                    }
-                    if (canNext)
-                    {
-                        if (numberPressed == 9)
-                        {
-                            promptPage++;
-                        }
-                    }
-                    if (numberPressed == 0)
-                    {
-                        showPrompt = false;
-                    }
-
-                    boolNumberPressed = false;
-                }
-                numberPressed = -1;
-            }
-            else
-            {
-                boolNumberPressed = true;
-            }*/
         }
 
         static void InventoryScript()
@@ -414,10 +373,10 @@ namespace Deep_Land
             DrawBorder(new Vector2(67, 1), new Vector2(22, 10), ConsoleColor.DarkGray);
             DrawText(new Vector2(75, 1), "-MENU-", ConsoleColor.DarkGray);
             DrawText(new Vector2(68, 3), "O: Options", ConsoleColor.White);
-            DrawText(new Vector2(68, 4), "I: Quit", ConsoleColor.White);
+            DrawText(new Vector2(68, 4), "I: Save & Quit", ConsoleColor.White);
         }
 
-        static void DrawBorder(Vector2 topLeft, Vector2 size, ConsoleColor color)
+        public static void DrawBorder(Vector2 topLeft, Vector2 size, ConsoleColor color)
         {
             size = new Vector2(size.X - 1, size.Y - 1);
             FastConsole.WriteToBuffer((int)topLeft.X, (int)topLeft.Y, '╔', color);
@@ -435,8 +394,8 @@ namespace Deep_Land
                 FastConsole.WriteToBuffer((int)topLeft.X + i, (int)topLeft.Y + (int)size.Y, '═', color);
             }
         }
-        
-        static void DrawText(Vector2 start, string text, ConsoleColor color, ConsoleColor bgColor = ConsoleColor.Black,bool writeFromLeft = true)
+
+        public static void DrawText(Vector2 start, string text, ConsoleColor color, ConsoleColor bgColor = ConsoleColor.Black,bool writeFromLeft = true)
         {
             char[] characters = text.ToCharArray();
 

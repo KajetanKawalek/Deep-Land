@@ -8,30 +8,31 @@ using System.Numerics;
 
 namespace Deep_Land
 {
-    class PickAxe : Item
+    class Placeable : Item
     {
         int count;
 
         int mineTime;
-        int power;
+        int blockID;
 
         bool canUse = true;
 
-        public PickAxe(string _name, int _mineTime, int _power) : base(_name)
+        public Placeable(string _name, int _mineTime, int _blockId) : base(_name)
         {
             name = _name;
             mineTime = _mineTime;
-            power = _power;
+            blockID = _blockId;
         }
 
         public override void Use()
         {
-            if(canUse)
+            if (canUse)
             {
                 Cell cell = World.loadedCellsArray[(int)PlayerData.cursorPositionInArray.X, (int)PlayerData.cursorPositionInArray.Y];
-                if(cell != null)
-                    if (cell.name != "bedrock")
-                        World.loadedCellsArray[(int)PlayerData.cursorPositionInArray.X, (int)PlayerData.cursorPositionInArray.Y] = null;
+                if (cell == null)
+                {
+                    World.InstanciateAtPositionInArray(blockID, PlayerData.cursorPositionInArray);
+                }
             }
         }
 
@@ -50,9 +51,9 @@ namespace Deep_Land
 
         public override void Update()
         {
-            if(!canUse)
+            if (!canUse)
             {
-                if(count >= mineTime)
+                if (count >= mineTime)
                 {
                     canUse = true;
                 }

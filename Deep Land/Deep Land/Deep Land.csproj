@@ -61,6 +61,8 @@
     <Compile Include="Cells\Entities\Misc\ItemBag.cs" />
     <Compile Include="Cells\Entities\Player\Player.cs" />
     <Compile Include="Items\Tools\PickAxe.cs" />
+    <Compile Include="Items\Tools\Placeable.cs" />
+    <Compile Include="MainMenu.cs" />
     <Compile Include="WorldGeneration.cs" />
     <Compile Include="FastConsole.cs" />
     <Compile Include="Input.cs" />

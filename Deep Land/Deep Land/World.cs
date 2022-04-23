@@ -33,6 +33,10 @@ namespace Deep_Land
             Chunk[,] chunks = CellArrayToChunks(loadedCellsArray);
 
             WriteChunks(chunks, new Vector2((float)Math.Ceiling((middlePoint.Y + 1) / 15), (float)Math.Ceiling((middlePoint.X + 1) / 15)));
+
+            string RunningPath = AppDomain.CurrentDomain.BaseDirectory;
+            string FileName = string.Format("{0}worlds\\test world\\data.txt", Path.GetFullPath(Path.Combine(RunningPath, @"..\..\")));
+            File.WriteAllLines(FileName, new string[] { PlayerData.player.positionInWorld.ToString() } );
         }
 
         static Chunk[,] PickChunks(Vector2 pointOfInterestPosition)
@@ -222,6 +226,9 @@ namespace Deep_Land
                 case 5:
                     array[(int)position.X, (int)position.Y] = new ItemBag("item bag", '$', ConsoleColor.Yellow, position, edgePoint + position, true, new Vector2(1, 1), new Item[] { new Item("PickAxe"), new Item("PickAxe1") , new Item("PickAxe2") , new Item("PickAxe3") , new Item("PickAxe4") , new Item("PickAxe5") , new Item("PickAxe6") , new Item("PickAxe7") , new Item("PickAxe8"), new Item("PickAxe9") }, 10, 10, 10);
                     break;
+                case 6:
+                    array[(int)position.X, (int)position.Y] = new Block("bedrock", '▓', ConsoleColor.DarkGray, position);
+                    break;
             }
         }
 
@@ -257,6 +264,9 @@ namespace Deep_Land
                     break;
                 case "item bag":
                     id = "5.";
+                    break;
+                case "bedrock":
+                    id = "6.";
                     break;
             }
 
